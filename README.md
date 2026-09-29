@@ -4,6 +4,14 @@ GarageManager sera une application de gestion destinée aux garages automobile. 
 
 L’objectif de cette application est de faciliter la gestion des interventions sur les véhicules présents à l’atelier, ainsi que le planning de travail des mécaniciens. Cela permet aux mécaniciens de savoir quels véhicules ils ont à traiter dans la journée.
 
+
+## Cloner le projet :
+
+```
+git clone https://github.com/votre-utilisateur/nom-du-projet.git
+```
+
+
 ## Démarrer le projet
 
 ### 1. Démarrer MySQL
@@ -24,6 +32,3 @@ php artisan serve
 ```bash
 npm run dev
 ```
-
-
-
