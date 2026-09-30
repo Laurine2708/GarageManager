@@ -10,8 +10,11 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 void createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     layout: (name) => {
+        // Ces pages gèrent leur plein écran; les écrans d'auth et de paramètres gardent leurs layouts dédiés.
         switch (true) {
             case name === 'Welcome':
+            case name === 'Dashboard':
+            case name === 'auth/Login':
                 return null;
             case name.startsWith('auth/'):
                 return AuthLayout;
