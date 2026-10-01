@@ -25,8 +25,10 @@ class Utilisateur extends Authenticatable
         'adresse_utilisateur',
         'CP_utilisateur',
         'ville_utilisateur',
+        'email_utilisateur',
         'login_utilisateur',
         'mdp_utilisateur',
+        'tel_utilisateur',
         'role_utilisateur',
     ];
 
