@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Plus } from '@lucide/vue';
 import InterventionBanner, { type Intervention } from '@/components/InterventionBanner.vue';
 import garageImage from '../../assets/images/accueil.jpg';
 import gearLogo from '../../assets/images/rouage.png';
@@ -10,13 +12,14 @@ const props = defineProps<{
     stats: Record<string, number>;
     interventions?: Intervention[];
     latestInterventions?: Intervention[];
+    appointmentClients?: { id: number; name: string; vehicles: { id: number; label: string }[] }[];
 }>();
 
 /** Libellés de navigation selon le rôle; les modules eux-mêmes restent hors de ce périmètre. */
 const navigation: Record<string, string[]> = {
-    client: ['Vue d’ensemble', 'Mes véhicules', 'Mes rendez-vous', 'Mes interventions'],
+    client: ['Vue d’ensemble', 'Mes véhicules', 'Historique d’interventions', 'Mon profil'],
     mecanicien: ['Vue d’ensemble', 'Utilisateurs', 'Véhicules', 'Interventions', 'Mon profil'],
-    administrateur: ['Vue d’ensemble', 'Utilisateurs', 'Véhicules', 'Interventions', 'Pièces', 'Tarifs MO'],
+    administrateur: ['Vue d’ensemble', 'Utilisateurs', 'Véhicules', 'Rendez-vous', 'Interventions', 'Pièces', 'Tarifs MO', 'Mon profil'],
 };
 
 /** Libellé de profil affiché dans le pied de la sidebar. */
@@ -28,6 +31,16 @@ const roleLabels: Record<string, string> = {
 
 const navItems = navigation[props.role] ?? ['Vue d’ensemble'];
 const roleLabel = roleLabels[props.role] ?? '';
+const appointmentDialog = ref<HTMLDialogElement | null>(null);
+const appointmentForm = useForm({
+    clientId: '',
+    vehicleId: '',
+    appointmentDate: '',
+    reason: '',
+});
+const appointmentVehicles = computed(() =>
+    props.appointmentClients?.find((client) => client.id === Number(appointmentForm.clientId))?.vehicles ?? [],
+);
 /** Les clés correspondent aux compteurs de statut calculés par Laravel. */
 const mechanicStatusStats = [
     { label: 'À faire', key: 'toDo' },
@@ -38,6 +51,19 @@ const mechanicStatusStats = [
 const imageStyle = {
     '--garage-image': `url(${garageImage})`,
 } as Record<string, string>;
+
+function openAppointmentDialog(): void {
+    appointmentDialog.value?.showModal();
+}
+
+function submitAppointment(): void {
+    appointmentForm.post('/rendez-vous', {
+        onSuccess: () => {
+            appointmentDialog.value?.close();
+            appointmentForm.reset();
+        },
+    });
+}
 </script>
 
 <template>
@@ -52,14 +78,34 @@ const imageStyle = {
             </Link>
 
             <nav aria-label="Navigation principale">
-                <span
-                    v-for="(item, index) in navItems"
-                    :key="item"
-                    class="nav-item"
-                    :class="{ active: index === 0 }"
-                >
-                    {{ item }}
-                </span>
+                <template v-for="(item, index) in navItems" :key="item">
+                    <!-- Le lien Vue d’ensemble ramène toujours au dashboard courant. -->
+                    <Link
+                        v-if="item === 'Vue d’ensemble'"
+                        href="/dashboard"
+                        class="nav-item active"
+                    >
+                        {{ item }}
+                    </Link>
+                    <Link
+                        v-else-if="item === 'Utilisateurs'"
+                        href="/utilisateurs"
+                        class="nav-item"
+                        :class="{ active: index === 0 }"
+                    >
+                        {{ item }}
+                    </Link>
+                    <Link
+                        v-else-if="item === 'Mon profil' && ['client', 'mecanicien', 'administrateur'].includes(props.role)"
+                        href="/mon-profil"
+                        class="nav-item"
+                    >
+                        {{ item }}
+                    </Link>
+                    <span v-else-if="item !== 'Vue d’ensemble'" class="nav-item" :class="{ active: index === 0 }">
+                        {{ item }}
+                    </span>
+                </template>
             </nav>
 
             <div class="sidebar-footer">
@@ -77,6 +123,15 @@ const imageStyle = {
                     <p>Vue d’ensemble</p>
                 </div>
                 <div class="heading-actions">
+                    <button
+                        v-if="props.role === 'administrateur'"
+                        type="button"
+                        class="add-appointment-button"
+                        @click="openAppointmentDialog"
+                    >
+                        <Plus :size="16" aria-hidden="true" />
+                        <span>Ajouter un rendez-vous</span>
+                    </button>
                     <span class="role-label mobile-role-label">{{ roleLabel }}</span>
                     <Link href="/logout" method="post" as="button" class="logout-button mobile-logout">
                         Déconnexion
@@ -160,10 +215,55 @@ const imageStyle = {
                             :intervention="intervention"
                         />
                     </div>
-                    <p v-else class="empty-state">Aucune intervention attribuée.</p>
+                    <p v-else class="empty-state">Pas d'interventions attribuées pour le moment</p>
                 </section>
             </template>
         </main>
+
+        <dialog ref="appointmentDialog" class="appointment-dialog" aria-labelledby="appointment-title">
+            <form class="appointment-form" @submit.prevent="submitAppointment">
+                <h2 id="appointment-title">Ajouter un rendez-vous</h2>
+                <label class="appointment-field">
+                    <span>Client :</span>
+                    <select v-model="appointmentForm.clientId" required @change="appointmentForm.vehicleId = ''">
+                        <option value="" disabled>Sélectionner un client</option>
+                        <option v-for="client in props.appointmentClients ?? []" :key="client.id" :value="String(client.id)">
+                            {{ client.name }}
+                        </option>
+                    </select>
+                    <small v-if="appointmentForm.errors.clientId">{{ appointmentForm.errors.clientId }}</small>
+                </label>
+                <label class="appointment-field">
+                    <span>Véhicule :</span>
+                    <select v-model="appointmentForm.vehicleId" required :disabled="!appointmentForm.clientId">
+                        <option value="" disabled>Sélectionner un véhicule</option>
+                        <option v-for="vehicle in appointmentVehicles" :key="vehicle.id" :value="String(vehicle.id)">
+                            {{ vehicle.label }}
+                        </option>
+                    </select>
+                    <small v-if="appointmentForm.errors.vehicleId">{{ appointmentForm.errors.vehicleId }}</small>
+                </label>
+                <label class="appointment-field">
+                    <span>Date et heure :</span>
+                    <input v-model="appointmentForm.appointmentDate" type="datetime-local" required />
+                    <small v-if="appointmentForm.errors.appointmentDate">{{ appointmentForm.errors.appointmentDate }}</small>
+                </label>
+                <label class="appointment-field">
+                    <span>Motif :</span>
+                    <input v-model="appointmentForm.reason" maxlength="255" required />
+                    <small v-if="appointmentForm.errors.reason">{{ appointmentForm.errors.reason }}</small>
+                </label>
+                <p v-if="props.appointmentClients?.length === 0" class="appointment-empty">
+                    Aucun client avec véhicule n’est disponible.
+                </p>
+                <div class="appointment-actions">
+                    <button type="button" class="appointment-cancel" @click="appointmentDialog?.close()">Annuler</button>
+                    <button type="submit" class="appointment-submit" :disabled="appointmentForm.processing || !props.appointmentClients?.length">
+                        {{ appointmentForm.processing ? 'Enregistrement...' : 'Ajouter' }}
+                    </button>
+                </div>
+            </form>
+        </dialog>
     </div>
 </template>
 
@@ -260,6 +360,33 @@ const imageStyle = {
 
 .logout-button:hover {
     background: #fff;
+}
+
+.add-appointment-button {
+    display: inline-flex;
+    min-height: 38px;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 13px;
+    border: 0;
+    background: #3e657e;
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+}
+
+.add-appointment-button:hover {
+    background: #2f536a;
+}
+
+.add-appointment-button:focus-visible,
+.appointment-form button:focus-visible,
+.appointment-form input:focus-visible,
+.appointment-form select:focus-visible {
+    outline: 2px solid #193b50;
+    outline-offset: 2px;
 }
 
 .dashboard-main {
@@ -375,6 +502,103 @@ const imageStyle = {
     font-size: 12px;
 }
 
+.appointment-dialog {
+    position: fixed;
+    inset: 0;
+    width: min(92vw, 520px);
+    margin: auto;
+    padding: 0;
+    border: 1px solid #b9c4ca;
+    background: #f7f8f8;
+    color: #252a2e;
+    box-shadow: 0 18px 50px rgb(20 36 47 / 28%);
+}
+
+.appointment-dialog::backdrop {
+    background: rgb(20 36 47 / 45%);
+}
+
+.appointment-form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 24px;
+}
+
+.appointment-form h2,
+.appointment-actions,
+.appointment-empty {
+    grid-column: 1 / -1;
+}
+
+.appointment-form h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.appointment-field {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.appointment-field input,
+.appointment-field select {
+    width: 100%;
+    min-height: 38px;
+    padding: 0 9px;
+    border: 1px solid #b9c4ca;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+}
+
+.appointment-field select {
+    cursor: pointer;
+}
+
+.appointment-field small {
+    color: #a33a35;
+}
+
+.appointment-empty {
+    margin: 0;
+    color: #68737b;
+    font-size: 12px;
+}
+
+.appointment-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.appointment-actions button {
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid #3e657e;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+}
+
+.appointment-cancel {
+    background: transparent;
+    color: #252a2e;
+}
+
+.appointment-submit {
+    background: #3e657e;
+    color: #fff;
+}
+
+.appointment-submit:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 .mobile-logout {
     display: none;
 }
@@ -440,6 +664,11 @@ const imageStyle = {
 
     .client-status-grid {
         gap: 9px;
+    }
+
+    .appointment-form {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 18px;
     }
 
 }

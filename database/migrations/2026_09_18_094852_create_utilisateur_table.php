@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('CP_utilisateur');
             $table->string('ville_utilisateur', 50);
             $table->string('login_utilisateur', 50);
+            $table->string('email_utilisateur', 255)->nullable();
             $table->string('mdp_utilisateur', 255);
             $table->string('role_utilisateur', 50);
         });

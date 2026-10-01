@@ -104,6 +104,21 @@ class DashboardController extends Controller
                 'inProgress' => Intervention::whereHas('statut', fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%cours%']))->count(),
                 'completed' => Intervention::whereHas('statut', fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%termin%']))->count(),
             ],
+            // Le formulaire de prise de rendez-vous ne propose que les véhicules de chaque client.
+            'appointmentClients' => Utilisateur::query()
+                ->whereRaw('LOWER(role_utilisateur) = ?', ['client'])
+                ->with(['vehicules' => fn ($query) => $query->orderBy('marque_vehicule')])
+                ->orderBy('nom_utilisateur')
+                ->orderBy('prenom_utilisateur')
+                ->get(['id_utilisateur', 'nom_utilisateur', 'prenom_utilisateur'])
+                ->map(fn (Utilisateur $client) => [
+                    'id' => $client->id_utilisateur,
+                    'name' => trim($client->prenom_utilisateur.' '.$client->nom_utilisateur),
+                    'vehicles' => $client->vehicules->map(fn (Vehicule $vehicle) => [
+                        'id' => $vehicle->id_vehicule,
+                        'label' => trim($vehicle->marque_vehicule.' '.$vehicle->modele_vehicule).' · '.$vehicle->immatriculation_vehicule,
+                    ])->values(),
+                ])->values(),
             'latestInterventions' => Intervention::with(['vehicule', 'statut', 'rendezVous.utilisateur'])
                 ->orderByDesc('date_depart_intervention')
                 ->limit(5)
