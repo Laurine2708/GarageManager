@@ -156,6 +156,9 @@ function closeSuccessDialog(): void {
                     <Link v-else-if="item === 'Utilisateurs'" href="/utilisateurs" class="nav-item">
                         {{ item }}
                     </Link>
+                    <Link v-else-if="item === 'Rendez-vous'" href="/rendez-vous" class="nav-item">
+                        {{ item }}
+                    </Link>
                     <Link
                         v-else-if="item === 'Mon profil' && ['client', 'mecanicien', 'administrateur'].includes(props.role)"
                         href="/mon-profil"
@@ -340,6 +343,13 @@ function closeSuccessDialog(): void {
     color: #35434c;
     font-size: 12px;
     text-decoration: none;
+    transition: background-color 140ms ease, color 140ms ease;
+}
+
+.nav-item:hover,
+.nav-item:focus-visible {
+    background: rgb(255 255 255 / 62%);
+    color: #152b3a;
 }
 
 .nav-item.active {

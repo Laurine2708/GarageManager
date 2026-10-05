@@ -13,7 +13,14 @@ Route::get('/', fn () => auth()->check()
 // L'action choisit les données à transmettre selon le rôle de cette session authentifiée.
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('rendez-vous', [AppointmentsController::class, 'index'])->name('appointments.index');
     Route::post('rendez-vous', [AppointmentsController::class, 'store'])->name('appointments.store');
+    Route::put('rendez-vous/{id}', [AppointmentsController::class, 'update'])
+        ->whereNumber('id')
+        ->name('appointments.update');
+    Route::delete('rendez-vous/{id}', [AppointmentsController::class, 'destroy'])
+        ->whereNumber('id')
+        ->name('appointments.destroy');
     Route::get('utilisateurs', UsersController::class)->name('users.index');
     Route::get('utilisateurs/create', [UsersController::class, 'create'])->name('users.create');
     Route::post('utilisateurs', [UsersController::class, 'store'])->name('users.store');

@@ -8,6 +8,7 @@ use App\Models\Statut;
 use App\Models\Tarif;
 use App\Models\Utilisateur;
 use App\Models\Vehicule;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
@@ -45,6 +46,8 @@ class DashboardTest extends TestCase
 
     public function test_mechanic_dashboard_counts_only_its_interventions_by_status()
     {
+        $this->travelTo(Carbon::parse('2026-10-05 12:00:00'));
+
         $mechanic = Utilisateur::create([
             'nom_utilisateur' => 'Leroy',
             'prenom_utilisateur' => 'Pierre',
@@ -65,6 +68,17 @@ class DashboardTest extends TestCase
             'login_utilisateur' => 'sophie.martin',
             'mdp_utilisateur' => 'password',
             'role_utilisateur' => 'mecanicien',
+        ]);
+
+        $administrator = Utilisateur::create([
+            'nom_utilisateur' => 'Administrateur',
+            'prenom_utilisateur' => 'Garage',
+            'adresse_utilisateur' => '1 rue du Garage',
+            'CP_utilisateur' => 87000,
+            'ville_utilisateur' => 'Limoges',
+            'login_utilisateur' => 'garage.admin',
+            'mdp_utilisateur' => 'password',
+            'role_utilisateur' => 'administrateur',
         ]);
 
         $vehicle = Vehicule::create([
@@ -122,6 +136,17 @@ class DashboardTest extends TestCase
                 ->where('stats.inProgress', 1)
                 ->where('stats.completed', 1)
                 ->has('interventions', 3));
+
+        $this->actingAs($administrator)
+            ->get(route('dashboard'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('Dashboard')
+                ->where('stats.availableMechanics', 0)
+                ->where('stats.totalInterventions', 3)
+                ->where('stats.vehiclesInProgress', 1)
+                ->where('stats.toDo', 1)
+                ->where('stats.inProgress', 2)
+                ->where('stats.completed', 1));
     }
 
     public function test_client_status_counts_include_only_interventions_for_owned_vehicles()
