@@ -60,7 +60,8 @@ function displayRole(role: string): string {
     return userRoleLabels[normalizedRole] ?? role.trim();
 }
 
-// Recalcule la liste affichée quand la recherche ou les utilisateurs changent, en comparant la requête à tous les champs visibles et identifiants.
+// Recalcule la liste affichée quand la recherche ou les utilisateurs changent,
+// en comparant la requête à tous les champs visibles et identifiants.
 const filteredUsers = computed(() => {
     const query = search.value.trim().toLocaleLowerCase();
 
@@ -77,14 +78,16 @@ const filteredUsers = computed(() => {
     ].some((value) => value.toLocaleLowerCase().includes(query)));
 });
 
-// Mémorise l'utilisateur choisi puis ouvre la boîte de confirmation après la mise à jour des références Vue dans le DOM.
+// Mémorise l'utilisateur choisi puis ouvre la boîte de confirmation après la mise à jour des références Vue
+// dans le DOM.
 function requestDelete(user: User): void {
     userToDelete.value = user;
     // Attend le prochain cycle de rendu avant de demander au navigateur d'ouvrir le dialogue natif.
     void nextTick(() => deleteDialog.value?.showModal());
 }
 
-// Supprime l'utilisateur sélectionné, affiche ensuite le dialogue de succès et réinitialise l'état de chargement à la fin de la requête.
+// Supprime l'utilisateur sélectionné, affiche ensuite le dialogue de succès et réinitialise
+// l'état de chargement à la fin de la requête.
 function deleteUser(): void {
     const user = userToDelete.value;
 
@@ -135,6 +138,9 @@ const imageStyle = {
                     >
                         {{ item }}
                     </Link>
+                    <Link v-else-if="item === 'Rendez-vous'" href="/rendez-vous" class="nav-item">
+                        {{ item }}
+                    </Link>
                     <Link
                         v-else-if="item === 'Mon profil' && ['client', 'mecanicien', 'administrateur'].includes(props.role)"
                         href="/mon-profil"
@@ -168,7 +174,7 @@ const imageStyle = {
                     class="action-button add-button"
                 >
                     <Plus :size="15" aria-hidden="true" />
-                    <span>AJOUTER</span>
+                    <span>Ajouter</span>
                 </Link>
             </header>
 
@@ -309,6 +315,13 @@ const imageStyle = {
     color: #35434c;
     font-size: 12px;
     text-decoration: none;
+    transition: background-color 140ms ease, color 140ms ease;
+}
+
+.nav-item:hover,
+.nav-item:focus-visible {
+    background: rgb(255 255 255 / 62%);
+    color: #152b3a;
 }
 
 .nav-item.active {

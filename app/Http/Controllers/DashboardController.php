@@ -6,6 +6,7 @@ use App\Models\Intervention;
 use App\Models\Rdv;
 use App\Models\Utilisateur;
 use App\Models\Vehicule;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -95,30 +96,36 @@ class DashboardController extends Controller
     /** Retourne les totaux globaux et les interventions récentes pour l'administrateur. */
     private function adminData(): array
     {
+        $toDoInterventions = Intervention::whereHas('statut', fn ($query) => $query->whereRaw(
+            'LOWER(nom_statut) LIKE ? OR LOWER(nom_statut) LIKE ?',
+            ['%attente%', '%faire%'],
+        ));
+        $inProgressInterventions = Intervention::whereHas(
+            'statut',
+            fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%cours%']),
+        );
+
         return [
             'stats' => [
                 'users' => Utilisateur::count(),
                 'vehicles' => Vehicule::count(),
                 'appointments' => Rdv::count(),
                 'interventions' => Intervention::count(),
-                'inProgress' => Intervention::whereHas('statut', fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%cours%']))->count(),
+                'availableMechanics' => Utilisateur::query()
+                    ->whereRaw('LOWER(role_utilisateur) = ?', ['mecanicien'])
+                    ->whereDoesntHave('interventions', fn ($query) => $query->whereDate(
+                        'date_depart_intervention',
+                        Carbon::today(),
+                    ))
+                    ->count(),
+                'totalInterventions' => (clone $toDoInterventions)->count() + (clone $inProgressInterventions)->count(),
+                'vehiclesInProgress' => (clone $inProgressInterventions)
+                    ->distinct('id_vehicule')
+                    ->count('id_vehicule'),
+                'toDo' => (clone $toDoInterventions)->count(),
+                'inProgress' => (clone $inProgressInterventions)->count(),
                 'completed' => Intervention::whereHas('statut', fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%termin%']))->count(),
             ],
-            // Le formulaire de prise de rendez-vous ne propose que les véhicules de chaque client.
-            'appointmentClients' => Utilisateur::query()
-                ->whereRaw('LOWER(role_utilisateur) = ?', ['client'])
-                ->with(['vehicules' => fn ($query) => $query->orderBy('marque_vehicule')])
-                ->orderBy('nom_utilisateur')
-                ->orderBy('prenom_utilisateur')
-                ->get(['id_utilisateur', 'nom_utilisateur', 'prenom_utilisateur'])
-                ->map(fn (Utilisateur $client) => [
-                    'id' => $client->id_utilisateur,
-                    'name' => trim($client->prenom_utilisateur.' '.$client->nom_utilisateur),
-                    'vehicles' => $client->vehicules->map(fn (Vehicule $vehicle) => [
-                        'id' => $vehicle->id_vehicule,
-                        'label' => trim($vehicle->marque_vehicule.' '.$vehicle->modele_vehicule).' · '.$vehicle->immatriculation_vehicule,
-                    ])->values(),
-                ])->values(),
             'latestInterventions' => Intervention::with(['vehicule', 'statut', 'rendezVous.utilisateur'])
                 ->orderByDesc('date_depart_intervention')
                 ->limit(5)
