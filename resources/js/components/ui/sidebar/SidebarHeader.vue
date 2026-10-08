@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Zone d’en-tête de la barre latérale. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

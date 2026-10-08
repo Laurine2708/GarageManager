@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Panneau déroulant qui contient les options du sélecteur. */
 import type { SelectContentEmits, SelectContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

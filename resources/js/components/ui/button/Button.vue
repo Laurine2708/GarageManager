@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * Bouton stylisé configurable par variante, taille ou primitive rendue.
+ * @prop variant Variante visuelle du bouton.
+ * @prop size Taille du bouton.
+ * @prop as Élément rendu.
+ * @event Événements natifs du primitive relayés au bouton.
+ */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import type { ButtonVariants } from "."

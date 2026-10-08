@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Bouton qui ouvre la liste et affiche la valeur sélectionnée. */
 import type { SelectTriggerProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { ChevronDown } from "@lucide/vue"

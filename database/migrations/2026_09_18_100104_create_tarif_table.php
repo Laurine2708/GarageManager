@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Crée le référentiel des tarifs applicables aux interventions. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les libellés et montants de tarifs.
      */
     public function up(): void
     {
@@ -19,7 +20,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime le référentiel des tarifs.
      */
     public function down(): void
     {

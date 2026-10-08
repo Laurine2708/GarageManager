@@ -7,12 +7,15 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\ResetsUserPasswords;
 
+/**
+ * Action Fortify qui valide et enregistre un mot de passe réinitialisé.
+ */
 class ResetUserPassword implements ResetsUserPasswords
 {
     use PasswordValidationRules;
 
     /**
-     * Validate and reset the user's forgotten password.
+     * Valide puis enregistre le nouveau mot de passe demandé lors d'une réinitialisation.
      *
      * @param  array<string, string>  $input
      */

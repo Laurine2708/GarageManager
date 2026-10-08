@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * Formulaire de définition d’un nouveau mot de passe.
+ * @prop token Jeton reçu dans le lien de réinitialisation.
+ * @prop email Adresse préremplie pour la demande.
+ * @prop passwordRules Règles de validation à présenter.
+ */
 import { Form, Head } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import InputError from '@/components/InputError.vue';

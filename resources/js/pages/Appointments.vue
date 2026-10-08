@@ -1,6 +1,11 @@
 <script setup lang="ts">
+/**
+ * Affiche et filtre la liste des rendez-vous.
+ * @prop role Rôle de l’utilisateur connecté.
+ * @prop appointments Rendez-vous affichés.
+ */
 import { computed, nextTick, ref } from 'vue';
-import { Head, Link, router, useForm } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { Check, Pencil, Plus, Search, Trash2 } from '@lucide/vue';
 import { Toaster } from '@/components/ui/sonner';
 import garageImage from '../../assets/images/accueil.jpg';
@@ -20,41 +25,21 @@ type Appointment = {
     reason: string;
 };
 
-type AppointmentClient = {
-    id: number;
-    name: string;
-    vehicles: { id: number; label: string }[];
-};
-
 const props = defineProps<{
     role: string;
     appointments: Appointment[];
-    appointmentClients: AppointmentClient[];
 }>();
 
 const search = ref('');
-const appointmentDialog = ref<HTMLDialogElement | null>(null);
-const detailsDialog = ref<HTMLDialogElement | null>(null);
 const deleteDialog = ref<HTMLDialogElement | null>(null);
 const successDialog = ref<HTMLDialogElement | null>(null);
 const successMessage = ref('');
-const appointmentBeingEdited = ref<Appointment | null>(null);
 const appointmentToDelete = ref<Appointment | null>(null);
-const appointmentForDetails = ref<Appointment | null>(null);
 const deleteError = ref('');
-const form = useForm({
-    clientId: '',
-    vehicleId: '',
-    appointmentDate: '',
-    reason: '',
-    returnTo: 'appointments.index',
-});
 
 const navItems = ['Vue d’ensemble', 'Utilisateurs', 'Véhicules', 'Rendez-vous', 'Interventions', 'Pièces', 'Tarifs MO', 'Mon profil'];
 const roleLabel = 'Profil Admin';
-const appointmentVehicles = computed(() =>
-    props.appointmentClients.find((client) => client.id === Number(form.clientId))?.vehicles ?? [],
-);
+/** Filtre les rendez-vous sur les coordonnées, le véhicule, la date et le motif. */
 const filteredAppointments = computed(() => {
     const query = search.value.trim().toLocaleLowerCase();
 
@@ -74,60 +59,14 @@ const imageStyle = {
     '--garage-image': `url(${garageImage})`,
 } as Record<string, string>;
 
-function openCreateDialog(): void {
-    appointmentBeingEdited.value = null;
-    form.reset();
-    form.clearErrors();
-    void nextTick(() => appointmentDialog.value?.showModal());
-}
-
-function openEditDialog(appointment: Appointment): void {
-    appointmentBeingEdited.value = appointment;
-    form.clearErrors();
-    form.clientId = String(appointment.clientId);
-    form.vehicleId = String(appointment.vehicleId);
-    form.appointmentDate = appointment.appointmentDate;
-    form.reason = appointment.reason;
-    void nextTick(() => appointmentDialog.value?.showModal());
-}
-
-function submitAppointment(): void {
-    const isCreating = !appointmentBeingEdited.value;
-    const options = {
-        onSuccess: () => {
-            appointmentDialog.value?.close();
-            appointmentBeingEdited.value = null;
-            form.reset();
-
-            if (isCreating) {
-                successMessage.value = 'Le rendez-vous a été ajouté avec succès.';
-                successDialog.value?.showModal();
-            } else {
-                successMessage.value = 'Le rendez-vous a été modifié avec succès.';
-                successDialog.value?.showModal();
-            }
-        },
-    };
-
-    if (appointmentBeingEdited.value) {
-        form.put(`/rendez-vous/${appointmentBeingEdited.value.id}`, options);
-        return;
-    }
-
-    form.post('/rendez-vous', options);
-}
-
-function openDetailsDialog(appointment: Appointment): void {
-    appointmentForDetails.value = appointment;
-    void nextTick(() => detailsDialog.value?.showModal());
-}
-
+/** Demande confirmation avant la suppression du rendez-vous. */
 function openDeleteDialog(appointment: Appointment): void {
     appointmentToDelete.value = appointment;
     deleteError.value = '';
     void nextTick(() => deleteDialog.value?.showModal());
 }
 
+/** Supprime le rendez-vous confirmé et gère le résultat de la requête. */
 function deleteAppointment(): void {
     const appointment = appointmentToDelete.value;
 
@@ -166,6 +105,9 @@ function deleteAppointment(): void {
                     <Link v-else-if="item === 'Utilisateurs'" href="/utilisateurs" class="nav-item">
                         {{ item }}
                     </Link>
+                    <Link v-else-if="item === 'Véhicules'" href="/vehicules" class="nav-item">
+                        {{ item }}
+                    </Link>
                     <Link v-else-if="item === 'Rendez-vous'" href="/rendez-vous" class="nav-item active" aria-current="page">
                         {{ item }}
                     </Link>
@@ -190,10 +132,10 @@ function deleteAppointment(): void {
                     <h1>Tableau de bord</h1>
                     <p>Rendez-vous</p>
                 </div>
-                <button type="button" class="action-button add-button" @click="openCreateDialog">
+                <Link href="/rendez-vous/create" class="action-button add-button">
                     <Plus :size="15" aria-hidden="true" />
                     <span>Ajouter</span>
-                </button>
+                </Link>
             </header>
 
             <form class="search-form" @submit.prevent>
@@ -206,33 +148,32 @@ function deleteAppointment(): void {
 
             <section class="appointment-list" aria-label="Liste des rendez-vous">
                 <article v-for="appointment in filteredAppointments" :key="appointment.id" class="appointment-row">
-                    <button
-                        type="button"
+                    <Link
                         class="appointment-card-link"
+                        :href="`/rendez-vous/${appointment.id}`"
                         :aria-label="`Voir le rendez-vous de ${appointment.clientName} du ${appointment.dateLabel}`"
-                        @click="openDetailsDialog(appointment)"
                     />
                     <div class="appointment-client">
                         <h2>{{ appointment.clientName }}</h2>
                         <p>
                             {{ appointment.email || 'Adresse mail non renseignée' }}<br />
                             {{ appointment.telephone || 'Numéro de téléphone non renseigné' }}<br />
-                            {{ appointment.vehicle }} · {{ appointment.registration }}
+                            {{ appointment.vehicle }} - {{ appointment.registration }}
                         </p>
                     </div>
                     <p class="appointment-date">Date du rendez-vous : {{ appointment.dateLabel }}</p>
                     <div class="row-actions">
                         <div class="row-action-buttons">
-                            <button type="button" class="action-button" @click.stop="openEditDialog(appointment)">
+                            <Link :href="`/rendez-vous/${appointment.id}/edit`" class="action-button" @click.stop>
                                 <Pencil :size="15" aria-hidden="true" />
                                 <span>Modifier</span>
-                            </button>
+                            </Link>
                             <button type="button" class="action-button" @click.stop="openDeleteDialog(appointment)">
                                 <Trash2 :size="15" aria-hidden="true" />
                                 <span>Supprimer</span>
                             </button>
                         </div>
-                        <span class="details-prompt">Cliquez pour voir le détail</span>
+                        <span class="details-prompt">Voir le détail</span>
                     </div>
                 </article>
                 <p v-if="filteredAppointments.length === 0" class="empty-state">
@@ -241,69 +182,12 @@ function deleteAppointment(): void {
             </section>
         </main>
 
-        <dialog ref="appointmentDialog" class="appointment-dialog" aria-labelledby="appointment-dialog-title">
-            <form class="appointment-form" @submit.prevent="submitAppointment">
-                <h2 id="appointment-dialog-title">{{ appointmentBeingEdited ? 'Modifier le rendez-vous' : 'Ajouter un rendez-vous' }}</h2>
-                <label class="appointment-field">
-                    <span>Client :</span>
-                    <select v-model="form.clientId" required @change="form.vehicleId = ''">
-                        <option value="" disabled>Sélectionner un client</option>
-                        <option v-for="client in props.appointmentClients" :key="client.id" :value="String(client.id)">
-                            {{ client.name }}
-                        </option>
-                    </select>
-                    <small v-if="form.errors.clientId">{{ form.errors.clientId }}</small>
-                </label>
-                <label class="appointment-field">
-                    <span>Véhicule :</span>
-                    <select v-model="form.vehicleId" required :disabled="!form.clientId">
-                        <option value="" disabled>Sélectionner un véhicule</option>
-                        <option v-for="vehicle in appointmentVehicles" :key="vehicle.id" :value="String(vehicle.id)">
-                            {{ vehicle.label }}
-                        </option>
-                    </select>
-                    <small v-if="form.errors.vehicleId">{{ form.errors.vehicleId }}</small>
-                </label>
-                <label class="appointment-field">
-                    <span>Date et heure :</span>
-                    <input v-model="form.appointmentDate" type="datetime-local" required />
-                    <small v-if="form.errors.appointmentDate">{{ form.errors.appointmentDate }}</small>
-                </label>
-                <label class="appointment-field">
-                    <span>Motif :</span>
-                    <input v-model="form.reason" maxlength="255" required />
-                    <small v-if="form.errors.reason">{{ form.errors.reason }}</small>
-                </label>
-                <div v-if="props.appointmentClients.length === 0" class="appointment-empty">
-                    Aucun client avec véhicule n’est disponible.
-                </div>
-                <div class="dialog-actions">
-                    <button type="button" class="action-button secondary-button" @click="appointmentDialog?.close()">Annuler</button>
-                    <button type="submit" class="action-button" :disabled="form.processing || props.appointmentClients.length === 0">
-                        {{ form.processing ? 'Enregistrement...' : appointmentBeingEdited ? 'Enregistrer' : 'Ajouter' }}
-                    </button>
-                </div>
-            </form>
-        </dialog>
-
-        <dialog ref="detailsDialog" class="confirmation-dialog" aria-labelledby="details-title">
-            <div v-if="appointmentForDetails" class="confirmation-content">
-                <h2 id="details-title">Détail du rendez-vous</h2>
-                <p><strong>Client :</strong> {{ appointmentForDetails.clientName }}</p>
-                <p><strong>Véhicule :</strong> {{ appointmentForDetails.vehicle }} · {{ appointmentForDetails.registration }}</p>
-                <p><strong>Date :</strong> {{ appointmentForDetails.dateLabel }}</p>
-                <p><strong>Motif :</strong> {{ appointmentForDetails.reason }}</p>
-                <div class="dialog-actions">
-                    <button type="button" class="action-button" @click="detailsDialog?.close()">Fermer</button>
-                </div>
-            </div>
-        </dialog>
-
         <dialog ref="deleteDialog" class="confirmation-dialog" aria-labelledby="delete-title">
             <div class="confirmation-content">
                 <h2 id="delete-title">Confirmer la suppression</h2>
                 <p v-if="appointmentToDelete">
                     Supprimer le rendez-vous de <strong>{{ appointmentToDelete.clientName }}</strong> du {{ appointmentToDelete.dateLabel }} ?
+                    Cette action est définitive.
                 </p>
                 <p v-if="deleteError" class="delete-error">{{ deleteError }}</p>
                 <div class="dialog-actions">
@@ -439,7 +323,7 @@ function deleteAppointment(): void {
     min-height: 86px;
     gap: 12px;
     padding: 12px;
-    background: #d8dadd;
+    background: #dfe1e3;
 }
 
 .appointment-card-link { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; border: 0; background: transparent; cursor: pointer; }
@@ -456,21 +340,10 @@ function deleteAppointment(): void {
 .details-prompt { color: #252a2e; font-size: 11px; font-style: italic; }
 .empty-state { margin: 0; padding: 18px 12px; color: #68737b; font-size: 13px; }
 
-.appointment-dialog,
 .confirmation-dialog { position: fixed; inset: 0; width: min(92vw, 440px); max-height: min(90vh, 720px); margin: auto; padding: 0; overflow: auto; border: 1px solid #b9c4ca; border-radius: 4px; background: #fff; color: #252a2e; box-shadow: 0 18px 50px rgb(20 36 47 / 28%); }
-.appointment-dialog::backdrop,
 .confirmation-dialog::backdrop { background: rgb(20 31 38 / 48%); backdrop-filter: blur(2px); }
-.appointment-form { display: grid; gap: 15px; padding: 24px; }
-.appointment-form h2,
 .confirmation-content h2 { margin: 0; font-size: 18px; }
-.appointment-field { display: flex; min-width: 0; flex-direction: column; gap: 6px; font-size: 12px; }
-.appointment-field input,
-.appointment-field select { width: 100%; min-height: 38px; padding: 0 9px; border: 1px solid #b9c4ca; background: #fff; color: inherit; font: inherit; }
-.appointment-field select { cursor: pointer; }
-.appointment-field select:disabled { border-color: #d1d5d8; background: #e7e9ea; color: #858d92; cursor: not-allowed; }
-.appointment-field small,
 .delete-error { color: #a33a35; }
-.appointment-empty { margin: 0; color: #68737b; font-size: 12px; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
 .secondary-button { background: #737e85; }
 .danger-button { background: #9f3935; }

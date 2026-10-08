@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Page de modification du mot de passe dans les réglages du compte.
+ * @prop passwordRules Règles de validation à présenter dans le formulaire.
+ */
 import { Form, Head } from '@inertiajs/vue3';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import Heading from '@/components/Heading.vue';
@@ -75,6 +79,9 @@ defineOptions({
                     placeholder="New password"
                     :passwordrules="props.passwordRules"
                 />
+                <p class="text-sm text-muted-foreground">
+                    12 caractères minimum, avec majuscules, minuscules et caractères spéciaux.
+                </p>
                 <InputError :message="errors.password" />
             </div>
 

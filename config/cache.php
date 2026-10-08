@@ -1,5 +1,7 @@
 <?php
 
+/** Définit le magasin de cache par défaut et les pilotes disponibles. */
+
 use Illuminate\Support\Str;
 
 return [

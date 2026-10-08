@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Élément individuel d’un sous-menu latéral. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

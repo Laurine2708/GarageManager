@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Panneau de texte affiché lorsque l’infobulle est ouverte. */
 import type { TooltipContentEmits, TooltipContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

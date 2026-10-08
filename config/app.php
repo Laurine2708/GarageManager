@@ -1,5 +1,7 @@
 <?php
 
+/** Paramètres généraux de l’application : identité, langue, chiffrement et maintenance. */
+
 return [
 
     /*

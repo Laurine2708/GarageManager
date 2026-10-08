@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Contenu de dialogue doté d’une zone de défilement. */
 import type { DialogContentEmits, DialogContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { X } from "@lucide/vue"

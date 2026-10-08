@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Fournit une mise en page minimale aux écrans d’authentification.
+ * @prop title Titre de l’écran.
+ * @prop description Texte d’accompagnement.
+ */
 import { Link } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';

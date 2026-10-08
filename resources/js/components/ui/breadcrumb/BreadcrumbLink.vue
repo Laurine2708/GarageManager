@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/** Lien d’une étape antérieure dans le fil d’Ariane. */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Primitive } from "reka-ui"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Affiche la marque de l’application avec son icône et son nom configuré. */
 import { usePage } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/** Vérifie le comportement de base de la route d’accueil. */
 class ExampleTest extends TestCase
 {
     use RefreshDatabase;

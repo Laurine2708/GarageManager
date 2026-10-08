@@ -1,5 +1,7 @@
 <?php
 
+/** Configure Fortify : identifiant de connexion, routes et fonctions d’authentification. */
+
 use Laravel\Fortify\Features;
 
 return [

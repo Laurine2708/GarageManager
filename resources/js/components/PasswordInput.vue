@@ -5,14 +5,18 @@ import type { HTMLAttributes } from 'vue';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
-/** Composant partagé pour garder le même comportement dans les formulaires de mot de passe. */
+/**
+ * Champ de mot de passe avec contrôle d’affichage et focus exposé au parent.
+ * @prop class Classe facultative ajoutée au champ.
+ * @event Attributs et événements du champ natif relayés à Input.
+ */
 defineOptions({ inheritAttrs: false });
 
 const props = defineProps<{
     class?: HTMLAttributes['class'];
 }>();
 
-// Le bouton œil ne change que le type du champ; la valeur saisie reste intacte.
+/** Indique si la valeur est momentanément affichée en clair. */
 const showPassword = ref(false);
 const inputRef = useTemplateRef('inputRef');
 

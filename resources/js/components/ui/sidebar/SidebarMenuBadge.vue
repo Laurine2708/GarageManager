@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Badge complémentaire aligné avec une entrée de menu latéral. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

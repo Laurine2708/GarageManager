@@ -1,7 +1,12 @@
 <script setup lang="ts">
+/**
+ * Affiche et filtre les utilisateurs, avec leur suppression.
+ * @prop role Rôle de l’utilisateur connecté.
+ * @prop users Utilisateurs à afficher.
+ */
 import { computed, nextTick, ref } from 'vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import { Pencil, Plus, Search, Trash2 } from '@lucide/vue';
+import { Filter, Pencil, Plus, Search, Trash2 } from '@lucide/vue';
 import { Toaster } from '@/components/ui/sonner';
 import garageImage from '../../assets/images/accueil.jpg';
 import gearLogo from '../../assets/images/rouage.png';
@@ -22,6 +27,8 @@ const props = defineProps<{
 }>();
 
 const search = ref('');
+const roleFilter = ref<'all' | 'client' | 'mecanicien' | 'administrateur'>('all');
+const roleFilterMenu = ref<HTMLDetailsElement | null>(null);
 const deleteDialog = ref<HTMLDialogElement | null>(null);
 const deleteSuccessDialog = ref<HTMLDialogElement | null>(null);
 const userToDelete = ref<User | null>(null);
@@ -37,6 +44,7 @@ const userRoleLabels: Record<string, string> = {
     mecanicien: 'Mécanicien',
     administrateur: 'Administrateur',
 };
+/** Rubriques de navigation pertinentes pour le rôle connecté. */
 // Prépare les rubriques du menu latéral selon le rôle connecté, pour respecter les accès propres aux clients, mécaniciens et administrateurs.
 const navItems = computed(() => {
     if (props.role === 'client') {
@@ -53,33 +61,50 @@ const navItems = computed(() => {
 const roleLabel = roleLabels[props.role] ?? '';
 
 // Convertit le rôle enregistré en libellé lisible, en neutralisant les accents et la casse pour reconnaître les variantes de données.
-function displayRole(role: string): string {
-    const normalizedRole = role.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
-
-    // Un seul libellé lisible est utilisé, même si la valeur stockée varie en casse ou en accents.
-    return userRoleLabels[normalizedRole] ?? role.trim();
+/** Convertit un rôle enregistré en libellé lisible, en tolérant accents et casse. */
+function normalizedRole(role: string): string {
+    return role.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase();
 }
 
+function displayRole(role: string): string {
+    const normalized = normalizedRole(role);
+    // Un seul libellé lisible est utilisé, même si la valeur stockée varie en casse ou en accents.
+    return userRoleLabels[normalized] ?? role.trim();
+}
+
+function displayName(user: User): string {
+    return `${user.prenom_utilisateur} ${user.nom_utilisateur.toLocaleUpperCase('fr-FR')}`;
+}
+
+function setRoleFilter(filter: typeof roleFilter.value): void {
+    roleFilter.value = filter;
+    roleFilterMenu.value?.removeAttribute('open');
+}
+
+/** Utilisateurs correspondant à la recherche sur les champs visibles. */
 // Recalcule la liste affichée quand la recherche ou les utilisateurs changent,
 // en comparant la requête à tous les champs visibles et identifiants.
 const filteredUsers = computed(() => {
     const query = search.value.trim().toLocaleLowerCase();
 
-    if (!query) return props.users;
+    return props.users.filter((user) => {
+        const matchesRole = roleFilter.value === 'all' || normalizedRole(user.role_utilisateur) === roleFilter.value;
+        const matchesSearch = !query || [
+            user.nom_utilisateur,
+            user.prenom_utilisateur,
+            user.email_utilisateur ?? '',
+            user.login_utilisateur,
+            user.tel_utilisateur ?? '',
+            user.role_utilisateur,
+        ].some((value) => value.toLocaleLowerCase().includes(query));
 
-    // Conserve chaque utilisateur pour lequel au moins une valeur recherchable contient le texte saisi.
-    return props.users.filter((user) => [
-        user.nom_utilisateur,
-        user.prenom_utilisateur,
-        user.email_utilisateur ?? '',
-        user.login_utilisateur,
-        user.tel_utilisateur ?? '',
-        user.role_utilisateur,
-    ].some((value) => value.toLocaleLowerCase().includes(query)));
+        return matchesRole && matchesSearch;
+    });
 });
 
 // Mémorise l'utilisateur choisi puis ouvre la boîte de confirmation après la mise à jour des références Vue
 // dans le DOM.
+/** Sélectionne un utilisateur et ouvre la confirmation de suppression. */
 function requestDelete(user: User): void {
     userToDelete.value = user;
     // Attend le prochain cycle de rendu avant de demander au navigateur d'ouvrir le dialogue natif.
@@ -88,13 +113,14 @@ function requestDelete(user: User): void {
 
 // Supprime l'utilisateur sélectionné, affiche ensuite le dialogue de succès et réinitialise
 // l'état de chargement à la fin de la requête.
+/** Supprime l’utilisateur sélectionné et met à jour l’état de confirmation. */
 function deleteUser(): void {
     const user = userToDelete.value;
 
     if (!user) return;
 
     isDeleting.value = true;
-    deletedUserName.value = `${user.prenom_utilisateur} ${user.nom_utilisateur}`;
+    deletedUserName.value = displayName(user);
     router.delete(`/utilisateurs/${user.id_utilisateur}`, {
         // Après confirmation serveur, ferme la demande de suppression et ouvre le dialogue de réussite.
         onSuccess: () => {
@@ -136,6 +162,9 @@ const imageStyle = {
                         class="nav-item"
                         :class="{ active: item === 'Utilisateurs' }"
                     >
+                        {{ item }}
+                    </Link>
+                    <Link v-else-if="item === 'Véhicules' || item === 'Mes véhicules'" href="/vehicules" class="nav-item">
                         {{ item }}
                     </Link>
                     <Link v-else-if="item === 'Rendez-vous'" href="/rendez-vous" class="nav-item">
@@ -184,6 +213,24 @@ const imageStyle = {
                     <Search :size="15" aria-hidden="true" />
                     <span>Rechercher</span>
                 </button>
+                <details ref="roleFilterMenu" class="role-filter">
+                    <summary class="action-button">
+                        <Filter :size="15" aria-hidden="true" />
+                        <span>Filtrer</span>
+                    </summary>
+                    <div class="role-filter-menu">
+                        <button type="button" :aria-pressed="roleFilter === 'all'" @click="setRoleFilter('all')">Tous</button>
+                        <button type="button" :aria-pressed="roleFilter === 'client'" @click="setRoleFilter('client')">
+                            Clients
+                        </button>
+                        <button type="button" :aria-pressed="roleFilter === 'mecanicien'" @click="setRoleFilter('mecanicien')">
+                            Mécaniciens
+                        </button>
+                        <button type="button" :aria-pressed="roleFilter === 'administrateur'" @click="setRoleFilter('administrateur')">
+                            Administrateurs
+                        </button>
+                    </div>
+                </details>
             </form>
 
             <section class="user-list" aria-label="Liste des utilisateurs">
@@ -193,10 +240,10 @@ const imageStyle = {
                         v-if="['administrateur', 'mecanicien'].includes(props.role)"
                         :href="`/utilisateurs/${user.id_utilisateur}`"
                         class="user-card-link"
-                        :aria-label="`Voir les détails de ${user.prenom_utilisateur} ${user.nom_utilisateur}`"
+                        :aria-label="`Voir les détails de ${displayName(user)}`"
                     />
                     <div class="user-identity">
-                        <h2>{{ user.prenom_utilisateur }} {{ user.nom_utilisateur }}</h2>
+                        <h2>{{ displayName(user) }}</h2>
                         <p>
                             {{ user.email_utilisateur || 'E-mail non renseigné' }}<br />
                             {{ user.tel_utilisateur || 'Téléphone non renseigné' }}
@@ -215,7 +262,7 @@ const imageStyle = {
                             </button>
                         </div>
                         <Link :href="`/utilisateurs/${user.id_utilisateur}`" class="details-prompt">
-                            Cliquez pour voir le détail
+                            Voir le détail
                         </Link>
                     </div>
                 </article>
@@ -234,14 +281,14 @@ const imageStyle = {
                 <h2 id="delete-title">Confirmer la suppression</h2>
                 <p id="delete-description">
                     Voulez-vous supprimer le compte de
-                    <strong v-if="userToDelete">{{ userToDelete.prenom_utilisateur }} {{ userToDelete.nom_utilisateur }}</strong> ?
+                    <strong v-if="userToDelete">{{ displayName(userToDelete) }}</strong> ?
                     Cette action est définitive.
                 </p>
                 <div class="dialog-actions">
                     <form method="dialog">
                         <button type="submit" class="action-button">Annuler</button>
                     </form>
-                    <button type="button" class="action-button" :disabled="isDeleting" @click="deleteUser">
+                    <button type="button" class="action-button danger-button" :disabled="isDeleting" @click="deleteUser">
                         <Trash2 :size="15" aria-hidden="true" />
                         <span>{{ isDeleting ? 'Suppression...' : 'Supprimer' }}</span>
                     </button>
@@ -437,7 +484,7 @@ const imageStyle = {
 }
 
 .search-form {
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 28px;
 }
 
@@ -461,6 +508,50 @@ const imageStyle = {
 .search-form .action-button {
     width: 166px;
     flex: 0 0 166px;
+}
+
+.role-filter {
+    position: relative;
+    flex: 0 0 110px;
+}
+
+.role-filter summary {
+    width: 100%;
+    min-height: 38px;
+    padding: 0 12px;
+    list-style: none;
+}
+
+.role-filter summary::-webkit-details-marker {
+    display: none;
+}
+
+.role-filter-menu {
+    position: absolute;
+    z-index: 5;
+    top: calc(100% + 6px);
+    right: 0;
+    display: grid;
+    min-width: 170px;
+    padding: 5px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgb(34 57 71 / 20%);
+}
+
+.role-filter-menu button {
+    padding: 9px 10px;
+    border: 0;
+    background: transparent;
+    color: #252a2e;
+    cursor: pointer;
+    font: inherit;
+    font-size: 11px;
+    text-align: left;
+}
+
+.role-filter-menu button:hover,
+.role-filter-menu button[aria-pressed="true"] {
+    background: #dfe1e3;
 }
 
 .user-list {
@@ -576,6 +667,14 @@ const imageStyle = {
 .confirmation-dialog::backdrop {
     background: rgb(20 31 38 / 48%);
     backdrop-filter: blur(2px);
+}
+
+.danger-button {
+    background: #9f3935;
+}
+
+.danger-button:hover:not(:disabled) {
+    background: #812e2a;
 }
 
 .confirmation-content {

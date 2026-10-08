@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Panneau de contenu d’un sous-menu déroulant. */
 import type { DropdownMenuSubContentEmits, DropdownMenuSubContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

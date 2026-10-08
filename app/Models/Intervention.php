@@ -5,14 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * Intervention effectuée ou planifiée sur un véhicule.
+ *
+ * @property int $id_intervention Identifiant de l'intervention.
+ * @property string $description_intervention Description des travaux.
+ * @property mixed $temps_intervention Durée déclarée.
+ * @property mixed $date_depart_intervention Date de départ de l'intervention.
+ * @property int $id_rdv Rendez-vous d'origine.
+ * @property int $id_tarif Tarif appliqué.
+ * @property int $id_utilisateur Mécanicien affecté.
+ * @property int $id_statut Statut courant.
+ * @property int $id_vehicule Véhicule concerné.
+ * @property int|null $kilometrage_intervention Kilométrage relevé.
+ */
 class Intervention extends Model
 {
+    /** Table métier contenant les interventions. */
     protected $table = 'intervention';
 
+    /** Clé primaire non conventionnelle du modèle. */
     protected $primaryKey = 'id_intervention';
 
+    /** Le schéma métier ne comporte pas de colonnes de suivi Laravel. */
     public $timestamps = false;
 
+    /** Champs métier autorisés pour l'assignation de masse. */
     protected $fillable = [
         'description_intervention',
         'temps_intervention',

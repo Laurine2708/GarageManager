@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Contenu du menu de compte : accès aux réglages et fermeture de session.
+ * @prop user Compte à afficher.
+ */
 import { Link, router } from '@inertiajs/vue3';
 import { LogOut, Settings } from '@lucide/vue';
 import {
@@ -16,6 +20,7 @@ type Props = {
     user: User;
 };
 
+/** Vide les visites Inertia conservées avant la fermeture de session. */
 const handleLogout = () => {
     router.flushAll();
 };

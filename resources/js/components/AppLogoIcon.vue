@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Dessine le pictogramme vectoriel de l’application.
+ * @prop className Classes appliquées au SVG.
+ * @event Attributs et événements SVG natifs relayés via $attrs.
+ */
 import type { HTMLAttributes } from 'vue';
 
 defineOptions({

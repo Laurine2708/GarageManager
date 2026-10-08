@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * En-tête adaptatif avec navigation, fil d’Ariane et menu de compte.
+ * @prop breadcrumbs Étapes à présenter dans le fil d’Ariane.
+ */
 import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid, Menu, Search } from '@lucide/vue';
 import { computed } from 'vue';
@@ -47,6 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
+/** Informations de session fournies par les propriétés Inertia. */
 const auth = computed(() => page.props.auth);
 const { isCurrentUrl, whenCurrentUrl } = useCurrentUrl();
 

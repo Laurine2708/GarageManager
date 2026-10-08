@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Racine d’un menu contextuel avec propriétés et événements Reka UI relayés. */
 import type { DropdownMenuRootEmits, DropdownMenuRootProps } from "reka-ui"
 import { DropdownMenuRoot, useForwardPropsEmits } from "reka-ui"
 

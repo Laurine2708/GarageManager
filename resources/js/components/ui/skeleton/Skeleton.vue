@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Placeholder animé indiquant le chargement d’un contenu. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Indicateur visuel d’une opération en cours. */
 import type { HTMLAttributes } from "vue"
 import { Loader2Icon } from "@lucide/vue"
 import { cn } from "@/lib/utils"

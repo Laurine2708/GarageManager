@@ -13,8 +13,14 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Gère les comptes utilisateurs et l'édition du profil personnel.
+ */
 class UsersController extends Controller
 {
+    /**
+     * Affiche les comptes utilisateurs avec les seuls champs nécessaires à la liste.
+     */
     public function __invoke(Request $request): Response
     {
         return Inertia::render('Users', [
@@ -34,6 +40,9 @@ class UsersController extends Controller
         ]);
     }
 
+    /**
+     * Affiche le formulaire de création réservé aux administrateurs.
+     */
     public function create(Request $request): Response
     {
         $this->authorizeAdministrator($request);
@@ -42,9 +51,13 @@ class UsersController extends Controller
             'role' => 'administrateur',
             'mode' => 'create',
             'user' => null,
+            'passwordRules' => Password::min(12)->mixedCase()->symbols()->toPasswordRulesString(),
         ]);
     }
 
+    /**
+     * Affiche le formulaire d'édition d'un compte existant.
+     */
     public function edit(Request $request, int $id): Response
     {
         $this->authorizeAdministrator($request);
@@ -54,9 +67,13 @@ class UsersController extends Controller
             'role' => 'administrateur',
             'mode' => 'edit',
             'user' => $this->userFormData($user),
+            'passwordRules' => Password::min(12)->mixedCase()->symbols()->toPasswordRulesString(),
         ]);
     }
 
+    /**
+     * Affiche une fiche en lecture seule aux administrateurs et mécaniciens.
+     */
     public function show(Request $request, int $id): Response
     {
         // Administrateurs et mécaniciens peuvent lire les fiches sans accéder à leur édition.
@@ -67,9 +84,13 @@ class UsersController extends Controller
             'role' => Str::ascii(Str::lower($request->user()->role_utilisateur)),
             'mode' => 'view',
             'user' => $this->userFormData($user),
+            'passwordRules' => Password::min(12)->mixedCase()->symbols()->toPasswordRulesString(),
         ]);
     }
 
+    /**
+     * Affiche à l'utilisateur authentifié son propre formulaire de profil.
+     */
     public function editProfile(Request $request): Response
     {
         $user = $this->authorizeProfileOwner($request);
@@ -78,9 +99,13 @@ class UsersController extends Controller
             'role' => Str::ascii(Str::lower($user->role_utilisateur)),
             'mode' => 'profile',
             'user' => $this->userFormData($user),
+            'passwordRules' => Password::min(12)->mixedCase()->symbols()->toPasswordRulesString(),
         ]);
     }
 
+    /**
+     * Crée un compte et lui attribue un mot de passe initial aléatoire non divulgué.
+     */
     public function store(Request $request): RedirectResponse
     {
         $this->authorizeAdministrator($request);
@@ -94,6 +119,9 @@ class UsersController extends Controller
         return to_route('users.create');
     }
 
+    /**
+     * Met à jour un compte; le mot de passe ne change que s'il est renseigné.
+     */
     public function update(Request $request, int $id): RedirectResponse
     {
         $this->authorizeAdministrator($request);
@@ -116,6 +144,9 @@ class UsersController extends Controller
         return to_route('users.edit', $id);
     }
 
+    /**
+     * Met à jour le profil de l'utilisateur courant sans permettre de changer son rôle.
+     */
     public function updateProfile(Request $request): RedirectResponse
     {
         $user = $this->authorizeProfileOwner($request);
@@ -136,6 +167,9 @@ class UsersController extends Controller
         return to_route('client.profile.edit');
     }
 
+    /**
+     * Supprime un compte non courant qui n'est lié à aucun élément métier.
+     */
     public function destroy(Request $request, int $id): RedirectResponse
     {
         $actor = $this->authorizeAdministrator($request);
@@ -163,7 +197,11 @@ class UsersController extends Controller
         return to_route('users.index');
     }
 
-    /** @return array<string, mixed> */
+    /**
+     * Valide les champs de compte, en adaptant les contraintes au mode création/édition.
+     *
+     * @return array<string, mixed> Valeurs validées du formulaire.
+     */
     private function validatedUser(
         Request $request,
         ?Utilisateur $user = null,
@@ -194,7 +232,7 @@ class UsersController extends Controller
         ];
 
         if (! $creating) {
-            $rules['password'] = ['nullable', 'string', Password::default(), 'confirmed'];
+            $rules['password'] = ['nullable', 'string', Password::min(12)->mixedCase()->symbols(), 'confirmed'];
         }
 
         if ($allowRole) {
@@ -211,8 +249,11 @@ class UsersController extends Controller
         return $validated;
     }
 
-    /** @param array<string, mixed> $validated
-     *  @return array<string, mixed>
+    /**
+     * Convertit les valeurs validées du formulaire vers les colonnes de `utilisateur`.
+     *
+     * @param array<string, mixed> $validated Valeurs issues de la validation.
+     * @return array<string, mixed> Attributs compatibles avec le modèle.
      */
     private function userAttributes(array $validated): array
     {
@@ -234,6 +275,9 @@ class UsersController extends Controller
         return $attributes;
     }
 
+    /**
+     * Autorise uniquement un administrateur et retourne son modèle utilisateur.
+     */
     private function authorizeAdministrator(Request $request): Utilisateur
     {
         $actor = $request->user();
@@ -246,6 +290,9 @@ class UsersController extends Controller
         return $actor;
     }
 
+    /**
+     * Autorise la consultation des fiches aux administrateurs et mécaniciens.
+     */
     private function authorizeUsersViewer(Request $request): Utilisateur
     {
         // La liste est visible par ces deux rôles; les autres ne peuvent pas consulter de fiche.
@@ -259,6 +306,9 @@ class UsersController extends Controller
         return $actor;
     }
 
+    /**
+     * Vérifie que l'utilisateur courant peut accéder à la gestion de son profil.
+     */
     private function authorizeProfileOwner(Request $request): Utilisateur
     {
         $user = $request->user();

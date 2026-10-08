@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Zone étroite interactive permettant de basculer la barre latérale. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 import { useSidebar } from "./utils"

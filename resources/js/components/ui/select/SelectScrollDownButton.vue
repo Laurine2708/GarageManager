@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Commande de défilement vers le bas de la liste du sélecteur. */
 import type { SelectScrollDownButtonProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { ChevronDown } from "@lucide/vue"

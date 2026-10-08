@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Racine du sélecteur et point de contrôle de sa valeur et de ses événements. */
 import type { SelectRootEmits, SelectRootProps } from "reka-ui"
 import { SelectRoot, useForwardPropsEmits } from "reka-ui"
 

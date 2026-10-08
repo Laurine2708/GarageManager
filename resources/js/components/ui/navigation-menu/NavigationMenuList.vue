@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Liste des éléments du menu de navigation. */
 import type { NavigationMenuListProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

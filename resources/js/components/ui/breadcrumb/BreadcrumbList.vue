@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/** Liste ordonnée d’étapes du fil d’Ariane. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

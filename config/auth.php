@@ -1,5 +1,7 @@
 <?php
 
+/** Relie les gardes et fournisseurs d’authentification au modèle métier Utilisateur. */
+
 use App\Models\Utilisateur;
 
 return [

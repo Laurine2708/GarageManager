@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Séparateur visuel entre les sections d’un menu déroulant. */
 import type { DropdownMenuSeparatorProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

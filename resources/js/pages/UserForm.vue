@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * Formulaire partagé de création, modification, consultation et profil utilisateur.
+ * @prop role Rôle de la session, utilisé pour la navigation.
+ * @prop mode Opération à effectuer sur la fiche.
+ * @prop user Fiche existante, ou null en création.
+ * @prop passwordRules Règles affichées pour le mot de passe.
+ */
 import { computed, ref } from 'vue';
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, Check, Save } from '@lucide/vue';
@@ -24,6 +31,7 @@ const props = defineProps<{
     role: string;
     mode: 'create' | 'edit' | 'profile' | 'view';
     user: UserRecord | null;
+    passwordRules: string;
 }>();
 
 const form = useForm({
@@ -42,10 +50,13 @@ const form = useForm({
 });
 const successDialog = ref<HTMLDialogElement | null>(null);
 
+/** Indique si le formulaire modifie une fiche existante. */
 // Indique si le formulaire sert à modifier une fiche utilisateur existante.
 const isEditing = computed(() => props.mode === 'edit');
+/** Indique si la page édite le profil de la session courante. */
 // Indique si le formulaire concerne le profil de la personne actuellement connectée.
 const isProfile = computed(() => props.mode === 'profile');
+/** Indique si les champs sont affichés en lecture seule. */
 // Indique si la page affiche une fiche en lecture seule, sans permettre son envoi.
 const isViewing = computed(() => props.mode === 'view');
 const roleLabels: Record<string, string> = {
@@ -59,6 +70,7 @@ const formRoleLabels: Record<string, string> = {
     administrateur: 'Administrateur',
 };
 const roleLabel = roleLabels[props.role] ?? '';
+/** Navigation latérale filtrée selon le rôle de la session. */
 // Construit le menu latéral selon le rôle connecté afin de ne proposer que les rubriques pertinentes pour ce rôle.
 const navItems = computed(() => {
     if (props.role === 'client') {
@@ -76,14 +88,17 @@ const roleNouns: Record<string, string> = {
     mecanicien: 'mécanicien',
     administrateur: 'administrateur',
 };
+/** Titre de page adapté au mode et, pour une fiche, au rôle enregistré. */
 // Génère le titre selon l'action en cours et, pour une fiche, selon le rôle enregistré de l'utilisateur plutôt que le rôle modifiable du formulaire.
 const pageTitle = computed(() => isEditing.value
     ? `Modifier une fiche ${roleNouns[props.user?.userRole ?? ''] ?? 'utilisateur'} :`
     : isViewing.value
         ? `Détails de la fiche ${roleNouns[props.user?.userRole ?? ''] ?? 'utilisateur'} :`
         : isProfile.value ? 'Modifier mon profil :' : 'Ajouter un utilisateur :');
+/** Titre de la confirmation de création ou de modification. */
 // Choisit le titre de la fenêtre de confirmation selon qu'une nouvelle fiche vient d'être créée ou qu'une donnée existante a été modifiée.
 const successTitle = computed(() => props.mode === 'create' ? 'Création validée' : 'Modifications validées');
+/** Message de confirmation adapté à l’opération réalisée. */
 // Fournit le texte de confirmation adapté à la création d'utilisateur, à la modification du profil personnel ou à la modification d'une autre fiche.
 const successMessage = computed(() => {
     if (props.mode === 'create') return 'Le profil utilisateur a été créé avec succès.';
@@ -91,12 +106,14 @@ const successMessage = computed(() => {
 
     return 'La fiche utilisateur a été modifiée avec succès.';
 });
+/** Destination de retour après fermeture de la confirmation. */
 // Définit la destination du bouton de retour et de la fermeture de confirmation : vue d'ensemble pour un profil, liste des utilisateurs pour une fiche.
 const returnHref = computed(() => isProfile.value ? '/dashboard' : '/utilisateurs');
 const imageStyle = {
     '--garage-image': `url(${garageImage})`,
 } as Record<string, string>;
 
+/** Envoie le formulaire vers l’action adaptée au mode courant. */
 // Envoie les données au point d'entrée correspondant au mode de page et n'affiche la confirmation qu'après une réponse serveur réussie.
 function submit(): void {
     if (isViewing.value) return;
@@ -123,6 +140,7 @@ function submit(): void {
     });
 }
 
+/** Ferme la confirmation puis revient à la page prévue pour le rôle et le mode. */
 // Ferme la confirmation après succès, puis renvoie l'utilisateur vers la page prévue pour son rôle et le mode traité.
 function closeSuccessDialog(): void {
     successDialog.value?.close();
@@ -154,6 +172,9 @@ function closeSuccessDialog(): void {
                         {{ item }}
                     </Link>
                     <Link v-else-if="item === 'Utilisateurs'" href="/utilisateurs" class="nav-item">
+                        {{ item }}
+                    </Link>
+                    <Link v-else-if="item === 'Véhicules' || item === 'Mes véhicules'" href="/vehicules" class="nav-item">
                         {{ item }}
                     </Link>
                     <Link v-else-if="item === 'Rendez-vous'" href="/rendez-vous" class="nav-item">
@@ -253,12 +274,19 @@ function closeSuccessDialog(): void {
                             v-model="form.password"
                             type="password"
                             autocomplete="new-password"
+                            :passwordrules="props.passwordRules"
                         />
+                        <small>12 caractères minimum, avec majuscules, minuscules et caractères spéciaux.</small>
                         <small v-if="form.errors.password">{{ form.errors.password }}</small>
                     </label>
                     <label v-if="isProfile" class="form-field">
                         <span>Confirmer le mot de passe :</span>
-                        <input v-model="form.password_confirmation" type="password" autocomplete="new-password" />
+                        <input
+                            v-model="form.password_confirmation"
+                            type="password"
+                            autocomplete="new-password"
+                            :passwordrules="props.passwordRules"
+                        />
                         <small v-if="form.errors.password_confirmation">{{ form.errors.password_confirmation }}</small>
                     </label>
                 </div>
@@ -435,6 +463,10 @@ function closeSuccessDialog(): void {
     color: #252a2e;
     font: inherit;
     font-size: 12px;
+}
+
+.form-field input[autocomplete="family-name"] {
+    text-transform: uppercase;
 }
 
 .form-field select {

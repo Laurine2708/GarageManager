@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Champ de saisie intégré à la barre latérale. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 import { Input } from '@/components/ui/input'

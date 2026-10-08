@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Dessine un motif SVG réutilisable avec un identifiant propre à chaque instance. */
 import { useId } from 'vue';
 
 const patternId = `pattern-${useId()}`;

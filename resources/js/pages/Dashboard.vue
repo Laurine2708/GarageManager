@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Tableau de bord avec les indicateurs et interventions du rôle courant. */
 import { Head, Link } from '@inertiajs/vue3';
 import InterventionBanner, { type Intervention } from '@/components/InterventionBanner.vue';
 import garageImage from '../../assets/images/accueil.jpg';
@@ -59,6 +60,13 @@ const imageStyle = {
                         v-if="item === 'Vue d’ensemble'"
                         href="/dashboard"
                         class="nav-item active"
+                    >
+                        {{ item }}
+                    </Link>
+                    <Link
+                        v-else-if="item === 'Véhicules' || item === 'Mes véhicules'"
+                        href="/vehicules"
+                        class="nav-item"
                     >
                         {{ item }}
                     </Link>

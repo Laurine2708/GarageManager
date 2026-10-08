@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\Intervention;
 use Illuminate\Database\Seeder;
 
+/** Insère des exemples d’interventions avec leurs rendez-vous et statuts. */
 class InterventionSeeder extends Seeder
 {
+    /** Crée les interventions de démonstration liées aux données métier. */
     public function run(): void
     {
         Intervention::create([
@@ -64,7 +66,7 @@ class InterventionSeeder extends Seeder
             'id_rdv' => 5,
             'id_tarif' => 2,
             'id_utilisateur' => 4,
-            'id_statut' => 4,
+            'id_statut' => 2,
             'id_vehicule' => 2,
             'kilometrage_intervention' => 50000,
         ]);

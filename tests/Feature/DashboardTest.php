@@ -13,6 +13,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
+/** Vérifie la protection du tableau de bord et ses données selon le rôle connecté. */
 class DashboardTest extends TestCase
 {
     use RefreshDatabase;
@@ -101,7 +102,7 @@ class DashboardTest extends TestCase
             'id_utilisateur' => $mechanic->id_utilisateur,
         ]);
 
-        foreach (['En attente', 'En cours', 'Terminée'] as $statusName) {
+        foreach (['À faire', 'En cours', 'Terminée'] as $statusName) {
             $status = Statut::create(['nom_statut' => $statusName]);
 
             Intervention::create([
@@ -115,6 +116,18 @@ class DashboardTest extends TestCase
                 'id_vehicule' => $vehicle->id_vehicule,
             ]);
         }
+
+        $legacyStatus = Statut::create(['nom_statut' => 'En attente']);
+        Intervention::create([
+            'description_intervention' => 'Ancien statut à exclure',
+            'temps_intervention' => 1,
+            'date_depart_intervention' => '2026-10-05',
+            'id_rdv' => $appointment->id_rdv,
+            'id_tarif' => $tariff->id_tarif,
+            'id_utilisateur' => $mechanic->id_utilisateur,
+            'id_statut' => $legacyStatus->id_statut,
+            'id_vehicule' => $vehicle->id_vehicule,
+        ]);
 
         $otherStatus = Statut::create(['nom_statut' => 'En cours']);
         Intervention::create([
@@ -135,7 +148,7 @@ class DashboardTest extends TestCase
                 ->where('stats.toDo', 1)
                 ->where('stats.inProgress', 1)
                 ->where('stats.completed', 1)
-                ->has('interventions', 3));
+                ->has('interventions', 2));
 
         $this->actingAs($administrator)
             ->get(route('dashboard'))

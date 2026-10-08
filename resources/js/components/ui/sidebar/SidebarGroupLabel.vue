@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Libellé d’un groupe dans la barre latérale. */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Primitive } from "reka-ui"

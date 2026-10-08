@@ -1,5 +1,7 @@
 <?php
 
+/** Référentiel local des composants frontend consommés par les fonctions d’authentification. */
+
 require getenv('LARAVEL_INSTALLER_AUTOLOADER') ?: __DIR__.'/vendor/autoload.php';
 
 use Laravel\Chisel\Chisel;

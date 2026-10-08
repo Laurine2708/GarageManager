@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Racine d’un panneau latéral avec état contrôlé par Reka UI. */
 import type { DialogRootEmits, DialogRootProps } from "reka-ui"
 import { DialogRoot, useForwardPropsEmits } from "reka-ui"
 

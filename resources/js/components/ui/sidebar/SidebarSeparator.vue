@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Séparateur visuel entre les zones de la barre latérale. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 import { Separator } from '@/components/ui/separator'

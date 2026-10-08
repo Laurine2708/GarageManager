@@ -1,10 +1,11 @@
+{{-- Document HTML racine d'Inertia : charge les ressources front et monte l'application Vue. --}}
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}"  @class(['dark' => ($appearance ?? 'system') == 'dark'])>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        {{-- Inline script to detect system dark mode preference and apply it immediately --}}
+        {{-- Applique le thème système avant le rendu pour éviter un flash de thème incorrect. --}}
         <script>
             (function() {
                 const appearance = '{{ $appearance ?? "system" }}';
@@ -19,7 +20,7 @@
             })();
         </script>
 
-        {{-- Inline style to set the HTML background color based on our theme in app.css --}}
+        {{-- Définit la couleur de fond dès le chargement, selon le thème actif. --}}
         <style>
             html {
                 background-color: oklch(1 0 0);

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Bouton qui commande l’ouverture ou la réduction de la barre latérale. */
 import type { HTMLAttributes } from "vue"
 import { PanelLeftClose, PanelLeftOpen } from "@lucide/vue"
 import { cn } from "@/lib/utils"
