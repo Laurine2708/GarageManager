@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Présente le raccourci clavier associé à une option du menu. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

@@ -5,10 +5,11 @@ namespace Database\Seeders;
 use App\Models\Vehicule;
 use Illuminate\Database\Seeder;
 
+/** Insère des véhicules de démonstration pour illustrer le parc automobile. */
 class VehiculeSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Crée des véhicules représentatifs pour le jeu de données initial.
      */
     public function run(): void
     {

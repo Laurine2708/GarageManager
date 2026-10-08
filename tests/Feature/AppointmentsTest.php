@@ -9,6 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
+/** Vérifie les droits administrateur et le cycle de vie des rendez-vous. */
 class AppointmentsTest extends TestCase
 {
     use RefreshDatabase;
@@ -31,8 +32,42 @@ class AppointmentsTest extends TestCase
             ->assertInertia(fn (Assert $page) => $page
                 ->component('Appointments')
                 ->where('appointments.0.id', $appointment->id_rdv)
-                ->where('appointments.0.clientName', 'Utilisateur Test 2')
+                ->where('appointments.0.clientName', 'Utilisateur TEST 2')
                 ->where('appointments.0.registration', 'AB-123-CD'));
+    }
+
+    public function test_administrator_can_open_each_appointment_form_mode(): void
+    {
+        $administrator = $this->createUtilisateur('administrateur');
+        $client = $this->createUtilisateur('client');
+        $vehicle = $this->createVehicle();
+        $client->vehicules()->attach($vehicle->id_vehicule);
+        $appointment = Rdv::create([
+            'date_rdv' => '2026-10-05 09:30:00',
+            'motif_rdv' => 'Révision annuelle',
+            'id_vehicule' => $vehicle->id_vehicule,
+            'id_utilisateur' => $client->id_utilisateur,
+        ]);
+
+        $this->actingAs($administrator)
+            ->get(route('appointments.create'))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('AppointmentForm')
+                ->where('mode', 'create')
+                ->where('appointment', null));
+
+        $this->get(route('appointments.show', $appointment->id_rdv))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('AppointmentForm')
+                ->where('mode', 'view')
+                ->where('appointment.id', $appointment->id_rdv)
+                ->where('appointment.clientName', 'Utilisateur TEST 2'));
+
+        $this->get(route('appointments.edit', $appointment->id_rdv))
+            ->assertInertia(fn (Assert $page) => $page
+                ->component('AppointmentForm')
+                ->where('mode', 'edit')
+                ->where('appointment.id', $appointment->id_rdv));
     }
 
     public function test_non_administrator_cannot_view_the_appointment_list(): void
@@ -144,6 +179,7 @@ class AppointmentsTest extends TestCase
             ->assertForbidden();
     }
 
+    /** Crée un compte minimal doté du rôle demandé pour les scénarios. */
     private function createUtilisateur(string $role): Utilisateur
     {
         static $sequence = 0;
@@ -161,6 +197,7 @@ class AppointmentsTest extends TestCase
         ]);
     }
 
+    /** Crée un véhicule minimal pour les scénarios de rendez-vous. */
     private function createVehicle(): Vehicule
     {
         return Vehicule::create([

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Conteneur d’avatar gérant l’image et son contenu de remplacement. */
 import type { HTMLAttributes } from "vue"
 import { AvatarRoot } from "reka-ui"
 import { cn } from "@/lib/utils"

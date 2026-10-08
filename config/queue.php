@@ -1,5 +1,7 @@
 <?php
 
+/** Configure les files de travaux, les lots et le stockage des échecs. */
+
 return [
 
     /*

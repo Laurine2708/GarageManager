@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Affiche les liens externes du pied de la navigation latérale.
+ * @prop items Liens et icônes à présenter.
+ * @prop class Classe facultative du groupe.
+ */
 import {
     SidebarGroup,
     SidebarGroupContent,

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** En-tête du dialogue regroupant titre et description. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

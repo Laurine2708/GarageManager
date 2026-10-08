@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/** Séparateur visuel entre deux étapes du fil d’Ariane. */
 import type { HTMLAttributes } from "vue"
 import { ChevronRight } from "@lucide/vue"
 import { cn } from "@/lib/utils"

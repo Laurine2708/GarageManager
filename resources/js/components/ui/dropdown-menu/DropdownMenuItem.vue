@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Option interactive d’un menu déroulant. */
 import type { DropdownMenuItemProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

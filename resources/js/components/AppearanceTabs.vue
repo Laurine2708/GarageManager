@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Permet de choisir le thème clair, sombre ou adapté au système. */
 import { Monitor, Moon, Sun } from '@lucide/vue';
 import { useAppearance } from '@/composables/useAppearance';
 

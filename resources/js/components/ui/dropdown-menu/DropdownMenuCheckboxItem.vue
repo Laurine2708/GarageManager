@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Option à cocher d’un menu déroulant. */
 import type { DropdownMenuCheckboxItemEmits, DropdownMenuCheckboxItemProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Check } from "@lucide/vue"

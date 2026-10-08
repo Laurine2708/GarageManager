@@ -12,10 +12,13 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Traite les opérations de consultation, mise à jour et suppression du profil.
+ */
 class ProfileController extends Controller
 {
     /**
-     * Show the user's profile settings page.
+     * Affiche les paramètres du profil et l'état de vérification de l'adresse e-mail.
      */
     public function edit(Request $request): Response
     {
@@ -26,7 +29,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update the user's profile information.
+     * Met à jour le profil et invalide la vérification si l'adresse e-mail change.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -38,13 +41,13 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Profil mis à jour.']);
 
         return to_route('profile.edit');
     }
 
     /**
-     * Delete the user's profile.
+     * Déconnecte puis supprime le compte, et invalide sa session courante.
      */
     public function destroy(ProfileDeleteRequest $request): RedirectResponse
     {

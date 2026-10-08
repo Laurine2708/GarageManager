@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Libellé de groupe affiché dans la liste des options. */
 import type { SelectLabelProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { SelectLabel } from "reka-ui"

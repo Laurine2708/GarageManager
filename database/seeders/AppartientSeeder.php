@@ -5,10 +5,11 @@ namespace Database\Seeders;
 use App\Models\Appartient;
 use Illuminate\Database\Seeder;
 
+/** Associe les véhicules de démonstration à leurs propriétaires. */
 class AppartientSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Insère les liens utilisateur-véhicule du jeu de données initial.
      */
     public function run(): void
     {

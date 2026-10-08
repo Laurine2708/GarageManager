@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Placeholder de chargement reprenant la forme d’une entrée de menu latéral. */
 import type { HTMLAttributes } from "vue"
 import { computed } from "vue"
 import { cn } from "@/lib/utils"
@@ -9,6 +10,7 @@ const props = defineProps<{
   class?: HTMLAttributes["class"]
 }>()
 
+/** Largeur variable du placeholder de texte du menu. */
 const width = computed(() => {
   return `${Math.floor(Math.random() * 40) + 50}%`
 })

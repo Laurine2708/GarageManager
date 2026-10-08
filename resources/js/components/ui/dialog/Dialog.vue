@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Racine de dialogue avec gestion de son état par le primitive Reka UI. */
 import type { DialogRootEmits, DialogRootProps } from "reka-ui"
 import { DialogRoot, useForwardPropsEmits } from "reka-ui"
 

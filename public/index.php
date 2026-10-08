@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Point d'entrée HTTP public : prépare Laravel puis transmet la requête capturée.
+ */
 use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 

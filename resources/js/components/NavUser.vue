@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Affiche le menu de compte courant dans la barre latérale. */
 import { usePage } from '@inertiajs/vue3';
 import { ChevronsUpDown } from '@lucide/vue';
 import { computed } from 'vue';
@@ -17,6 +18,7 @@ import UserInfo from '@/components/UserInfo.vue';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 
 const page = usePage();
+/** Compte authentifié fourni par les propriétés de page Inertia. */
 const user = computed(() => page.props.auth.user);
 const { isMobile, state } = useSidebar();
 </script>

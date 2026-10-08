@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Groupe d’options associées dans un sélecteur. */
 import type { SelectGroupProps } from "reka-ui"
 import { SelectGroup } from "reka-ui"
 

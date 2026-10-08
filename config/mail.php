@@ -1,5 +1,7 @@
 <?php
 
+/** Configure les transports de courrier et l’adresse d’expédition par défaut. */
+
 return [
 
     /*

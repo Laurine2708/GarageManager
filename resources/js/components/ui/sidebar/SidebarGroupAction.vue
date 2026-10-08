@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Action positionnée dans l’en-tête d’un groupe latéral. */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Primitive } from "reka-ui"

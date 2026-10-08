@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Affiche une liste d’erreurs dans une alerte accessible.
+ * @prop errors Messages à présenter, dédupliqués dans l’affichage.
+ * @prop title Titre facultatif de l’alerte.
+ */
 import { AlertCircle } from '@lucide/vue';
 import { computed } from 'vue';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -9,9 +14,10 @@ type Props = {
 };
 
 const props = withDefaults(defineProps<Props>(), {
-    title: 'Something went wrong.',
+    title: 'Une erreur est survenue.',
 });
 
+/** Supprime les doublons des messages d’erreur affichés. */
 const uniqueErrors = computed(() => Array.from(new Set(props.errors)));
 </script>
 

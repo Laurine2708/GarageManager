@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** En-tête du panneau latéral regroupant son titre et sa description. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

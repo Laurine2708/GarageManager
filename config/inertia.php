@@ -1,5 +1,7 @@
 <?php
 
+/** Configure le rendu SSR, la découverte des pages Inertia et leurs assertions de test. */
+
 return [
 
     /*

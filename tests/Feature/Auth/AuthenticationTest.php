@@ -6,6 +6,7 @@ use App\Models\Utilisateur;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/** Couvre l’affichage, la connexion, la limitation des essais et la déconnexion. */
 class AuthenticationTest extends TestCase
 {
     use RefreshDatabase;
@@ -42,6 +43,32 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_account_is_throttled_after_five_failed_attempts_for_one_minute(): void
+    {
+        $user = $this->createUtilisateur();
+
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $this->post(route('login.store'), [
+                'login_utilisateur' => $user->login_utilisateur,
+                'password' => 'wrong-password',
+            ]);
+        }
+
+        $this->post(route('login.store'), [
+            'login_utilisateur' => $user->login_utilisateur,
+            'password' => 'password',
+        ])->assertSessionHasErrors();
+        $this->assertGuest();
+
+        $this->travel(61)->seconds();
+
+        $this->post(route('login.store'), [
+            'login_utilisateur' => $user->login_utilisateur,
+            'password' => 'password',
+        ])->assertRedirect(route('dashboard', absolute: false));
+        $this->assertAuthenticatedAs($user);
+    }
+
     public function test_users_can_logout()
     {
         $user = $this->createUtilisateur();
@@ -53,6 +80,7 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    /** Prépare un compte métier utilisable par les essais d’authentification. */
     private function createUtilisateur(): Utilisateur
     {
         return Utilisateur::create([

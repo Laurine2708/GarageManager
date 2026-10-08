@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Image d’avatar avec repli pris en charge par le primitive Reka UI. */
 import type { AvatarImageProps } from "reka-ui"
 import { AvatarImage } from "reka-ui"
 

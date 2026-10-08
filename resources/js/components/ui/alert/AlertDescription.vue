@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Texte descriptif présenté dans une alerte. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

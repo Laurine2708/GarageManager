@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Notification;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
 
+/** Vérifie l’émission du lien de réinitialisation et la validation de son jeton. */
 class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** Ignore ces scénarios lorsque la réinitialisation est désactivée dans Fortify. */
     protected function setUp(): void
     {
         parent::setUp();

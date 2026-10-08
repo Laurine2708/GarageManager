@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Racine d’un sous-menu déroulant. */
 import type { DropdownMenuSubEmits, DropdownMenuSubProps } from "reka-ui"
 import {
   DropdownMenuSub,

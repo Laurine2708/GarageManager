@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Élément qui ouvre le dialogue associé. */
 import type { DialogTriggerProps } from "reka-ui"
 import { DialogTrigger } from "reka-ui"
 

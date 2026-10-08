@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Élément qui ouvre le menu déroulant. */
 import type { DropdownMenuTriggerProps } from "reka-ui"
 import { DropdownMenuTrigger, useForwardProps } from "reka-ui"
 

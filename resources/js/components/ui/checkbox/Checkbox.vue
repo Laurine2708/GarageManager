@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Case à cocher stylisée avec état et événements du primitive Reka UI. */
 import type { CheckboxRootEmits, CheckboxRootProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Check } from "@lucide/vue"

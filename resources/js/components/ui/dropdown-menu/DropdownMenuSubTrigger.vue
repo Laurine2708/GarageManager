@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Déclencheur d’ouverture d’un sous-menu déroulant. */
 import type { DropdownMenuSubTriggerProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { ChevronRight } from "@lucide/vue"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Élément de liste dans le menu de la barre latérale. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

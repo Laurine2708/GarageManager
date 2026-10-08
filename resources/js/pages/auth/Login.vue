@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Formulaire de connexion et adaptation des erreurs de réponse pour l’interface. */
 import { Form, Head } from '@inertiajs/vue3';
 import PasswordInput from '@/components/PasswordInput.vue';
 import { store } from '@/routes/login';
@@ -11,6 +12,9 @@ const translateLoginError = (message?: string) =>
         ? 'Identifiant ou mot de passe incorrect.'
         : message;
 
+/**
+ * @prop status Message de résultat éventuellement transmis par le serveur.
+ */
 defineProps<{
     status?: string;
 }>();

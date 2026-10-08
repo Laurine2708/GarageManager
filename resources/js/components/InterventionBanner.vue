@@ -11,23 +11,24 @@ export type Intervention = {
 };
 
 const props = defineProps<{
+    /** Données de l’intervention à afficher dans le bandeau. */
     intervention: Intervention;
 }>();
 
+/**
+ * Présente le véhicule, le client, les dates et le statut d’une intervention.
+ * @prop intervention Données métier affichées dans le bandeau.
+ */
 /** Associe les libellés de statut en base aux classes de couleur du bandeau. */
 const statusClass = (status: string | null) => {
     const normalized = status?.trim().toLocaleLowerCase('fr');
 
-    if (normalized === 'à faire' || normalized === 'en attente') {
+    if (normalized === 'à faire') {
         return 'status-to-do';
     }
 
     if (normalized === 'en cours') {
         return 'status-in-progress';
-    }
-
-    if (normalized === 'à contrôler') {
-        return 'status-to-check';
     }
 
     if (normalized === 'terminé' || normalized === 'terminée') {
@@ -77,7 +78,7 @@ const formatDate = (value: string) => {
         <span class="status-tag status-tag-compact" :class="statusClass(props.intervention.status)">
             {{ props.intervention.status ?? 'Sans statut' }}
         </span>
-        <span class="details-prompt">Cliquez pour voir le détail</span>
+        <span class="details-prompt">Voir le détail</span>
     </article>
 </template>
 
@@ -167,12 +168,6 @@ const formatDate = (value: string) => {
     border-color: #d5bd70;
     background: #fff0c2;
     color: #795900;
-}
-
-.status-to-check {
-    border-color: #df9b59;
-    background: #ffead5;
-    color: #8a480d;
 }
 
 .status-complete {

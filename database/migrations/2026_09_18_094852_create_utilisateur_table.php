@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Crée la table des comptes métier, avec coordonnées, identifiant et rôle. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée le schéma initial des utilisateurs du garage.
      */
     public function up(): void
     {
@@ -26,7 +27,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime la table métier des utilisateurs.
      */
     public function down(): void
     {

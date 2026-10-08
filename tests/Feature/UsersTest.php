@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
+/** Vérifie les droits par rôle et les opérations sur les comptes et profils métier. */
 class UsersTest extends TestCase
 {
     use RefreshDatabase;
@@ -208,7 +209,31 @@ class UsersTest extends TestCase
         ]);
     }
 
+    public function test_profile_password_change_requires_twelve_characters_mixed_case_and_a_symbol(): void
+    {
+        $client = $this->createUtilisateur('client');
+        $form = $this->validForm([
+            'password' => 'Moteur!FortXXXX',
+            'password_confirmation' => 'Moteur!FortXXXX',
+        ]);
+
+        $this->actingAs($client)
+            ->put(route('client.profile.update'), $form)
+            ->assertRedirect(route('client.profile.edit'));
+
+        $this->assertTrue(Hash::check('Moteur!FortXXXX', $client->fresh()->mdp_utilisateur));
+
+        $form['password'] = 'short-password';
+        $form['password_confirmation'] = 'short-password';
+
+        $this->put(route('client.profile.update'), $form)
+            ->assertSessionHasErrors('password');
+
+        $this->assertTrue(Hash::check('Moteur!FortXXXX', $client->fresh()->mdp_utilisateur));
+    }
+
     /** @return array<string, string> */
+    /** Construit les données valides du formulaire, avec surcharges de scénario. */
     private function validForm(array $overrides = []): array
     {
         return array_merge([
@@ -227,6 +252,7 @@ class UsersTest extends TestCase
         ], $overrides);
     }
 
+    /** Crée un utilisateur minimal pour les essais de gestion des comptes. */
     private function createUtilisateur(string $role): Utilisateur
     {
         static $sequence = 0;

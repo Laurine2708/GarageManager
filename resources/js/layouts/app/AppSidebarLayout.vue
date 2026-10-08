@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Organise les pages autour d’une barre latérale et de leur contenu.
+ * @prop breadcrumbs Étapes affichées dans l’en-tête latéral.
+ */
 import AppContent from '@/components/AppContent.vue';
 import AppShell from '@/components/AppShell.vue';
 import AppSidebar from '@/components/AppSidebar.vue';

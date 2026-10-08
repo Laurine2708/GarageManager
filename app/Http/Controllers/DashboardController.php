@@ -12,11 +12,15 @@ use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
+/**
+ * Prépare les indicateurs et les interventions du tableau de bord selon le rôle.
+ */
 class DashboardController extends Controller
 {
     /**
-        * Sélectionne le jeu de données du dashboard selon le rôle stocké sur l'utilisateur connecté.
+     * Affiche le tableau de bord avec les données adaptées au rôle de l'utilisateur connecté.
      *
+     * @param Request $request Requête authentifiée contenant l'utilisateur courant.
      * @return Response
      */
     public function __invoke(Request $request): Response
@@ -39,7 +43,11 @@ class DashboardController extends Controller
         ]);
     }
 
-    /** Retourne uniquement les compteurs et interventions des véhicules liés au client. */
+    /**
+     * Prépare les compteurs et les interventions des seuls véhicules du client.
+     *
+     * @return array<string, mixed> Données attendues par la page du tableau de bord.
+     */
     private function clientData(Utilisateur $user): array
     {
         $vehicles = $user->vehicules()->orderBy('marque_vehicule')->get();
@@ -64,12 +72,17 @@ class DashboardController extends Controller
         ];
     }
 
-    /** Retourne les interventions de ce mécanicien et leurs statuts pour les trois compteurs. */
+    /**
+     * Prépare les interventions assignées au mécanicien et ses compteurs par statut.
+     *
+     * @return array<string, mixed> Données attendues par la page du tableau de bord.
+     */
     private function mechanicData(Utilisateur $user): array
     {
         // Le lien hasMany filtre par id_utilisateur; l'eager loading évite une requête par bandeau.
         $interventions = $user->interventions()
             ->with(['vehicule', 'statut', 'rendezVous.utilisateur'])
+            ->whereHas('statut', fn ($query) => $query->whereIn('nom_statut', ['À faire', 'En cours']))
             ->orderByDesc('date_depart_intervention')
             ->limit(8)
             ->get();
@@ -77,32 +90,33 @@ class DashboardController extends Controller
         return [
             'stats' => [
                 'toDo' => $user->interventions()
-                    ->whereHas('statut', fn ($query) => $query->whereRaw(
-                        'LOWER(nom_statut) LIKE ? OR LOWER(nom_statut) LIKE ?',
-                        ['%attente%', '%faire%'],
-                    ))
+                    ->whereHas('statut', fn ($query) => $query->where('nom_statut', 'À faire'))
                     ->count(),
                 'inProgress' => $user->interventions()
-                    ->whereHas('statut', fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%cours%']))
+                    ->whereHas('statut', fn ($query) => $query->where('nom_statut', 'En cours'))
                     ->count(),
                 'completed' => $user->interventions()
-                    ->whereHas('statut', fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%termin%']))
+                    ->whereHas('statut', fn ($query) => $query->where('nom_statut', 'Terminée'))
                     ->count(),
             ],
             'interventions' => $interventions->map(fn (Intervention $intervention) => $this->interventionData($intervention)),
         ];
     }
 
-    /** Retourne les totaux globaux et les interventions récentes pour l'administrateur. */
+    /**
+     * Prépare les statistiques globales et les dernières interventions de l'administrateur.
+     *
+     * @return array<string, mixed> Données attendues par la page du tableau de bord.
+     */
     private function adminData(): array
     {
-        $toDoInterventions = Intervention::whereHas('statut', fn ($query) => $query->whereRaw(
-            'LOWER(nom_statut) LIKE ? OR LOWER(nom_statut) LIKE ?',
-            ['%attente%', '%faire%'],
-        ));
+        $toDoInterventions = Intervention::whereHas(
+            'statut',
+            fn ($query) => $query->where('nom_statut', 'À faire'),
+        );
         $inProgressInterventions = Intervention::whereHas(
             'statut',
-            fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%cours%']),
+            fn ($query) => $query->where('nom_statut', 'En cours'),
         );
 
         return [
@@ -124,7 +138,7 @@ class DashboardController extends Controller
                     ->count('id_vehicule'),
                 'toDo' => (clone $toDoInterventions)->count(),
                 'inProgress' => (clone $inProgressInterventions)->count(),
-                'completed' => Intervention::whereHas('statut', fn ($query) => $query->whereRaw('LOWER(nom_statut) LIKE ?', ['%termin%']))->count(),
+                'completed' => Intervention::whereHas('statut', fn ($query) => $query->where('nom_statut', 'Terminée'))->count(),
             ],
             'latestInterventions' => Intervention::with(['vehicule', 'statut', 'rendezVous.utilisateur'])
                 ->orderByDesc('date_depart_intervention')
@@ -134,7 +148,11 @@ class DashboardController extends Controller
         ];
     }
 
-    /** Limite les données véhicule transmises aux seuls champs montrés dans un bandeau. */
+    /**
+     * Réduit un véhicule aux informations affichées dans un bandeau d'intervention.
+     *
+     * @return array{name: string, registration: string}
+     */
     private function vehicleData(Vehicule $vehicle): array
     {
         return [
@@ -143,13 +161,18 @@ class DashboardController extends Controller
         ];
     }
 
-    /** Prépare le contrat commun consommé par InterventionBanner.vue. */
+    /**
+     * Convertit une intervention au format commun utilisé par le bandeau.
+     *
+     * La date de départ et la date du rendez-vous restent deux informations distinctes.
+     *
+     * @return array<string, mixed>
+     */
     private function interventionData(Intervention $intervention): array
     {
         return [
             'id' => $intervention->id_intervention,
             'description' => $intervention->description_intervention,
-            // date_depart_intervention et la date du rendez-vous sont deux champs distincts du schéma.
             'date' => $intervention->date_depart_intervention,
             'appointmentDate' => $intervention->rendezVous?->date_rdv,
             'status' => $intervention->statut?->nom_statut,
@@ -157,7 +180,7 @@ class DashboardController extends Controller
                 ? $this->vehicleData($intervention->vehicule)
                 : null,
             'client' => $intervention->rendezVous?->utilisateur
-                ? trim($intervention->rendezVous->utilisateur->nom_utilisateur.' '.$intervention->rendezVous->utilisateur->prenom_utilisateur)
+                ? trim(Str::upper($intervention->rendezVous->utilisateur->nom_utilisateur).' '.$intervention->rendezVous->utilisateur->prenom_utilisateur)
                 : null,
         ];
     }

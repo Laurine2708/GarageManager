@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Conteneur pliable contrôlé par les propriétés et événements Reka UI. */
 import type { CollapsibleRootEmits, CollapsibleRootProps } from "reka-ui"
 import { CollapsibleRoot, useForwardPropsEmits } from "reka-ui"
 

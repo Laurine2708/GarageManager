@@ -6,10 +6,11 @@ use App\Models\Utilisateur;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
+/** Crée les comptes d’exemple représentant les rôles de l’application. */
 class UtilisateurSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Insère des clients, un mécanicien et un administrateur de démonstration.
      */
     public function run(): void
     {

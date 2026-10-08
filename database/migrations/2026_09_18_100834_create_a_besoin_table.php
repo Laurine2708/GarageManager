@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Crée la relation entre les pièces nécessaires et les interventions. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée la table pivot avec une clé primaire composée des deux références.
      */
     public function up(): void
     {
@@ -23,7 +24,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime la table d’association intervention-pièce.
      */
     public function down(): void
     {

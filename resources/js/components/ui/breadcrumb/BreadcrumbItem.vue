@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/** Élément individuel d’un fil d’Ariane. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Libellé non interactif qui identifie un groupe du menu déroulant. */
 import type { DropdownMenuLabelProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

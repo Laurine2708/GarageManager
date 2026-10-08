@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Contrôle qui ferme le panneau latéral. */
 import type { DialogCloseProps } from "reka-ui"
 import { DialogClose } from "reka-ui"
 

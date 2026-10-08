@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Contenu de remplacement visible lorsque l’image d’avatar est indisponible. */
 import type { AvatarFallbackProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

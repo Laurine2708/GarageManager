@@ -6,19 +6,39 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-/** Modèle de session correspondant à la table métier `utilisateur`. */
+/**
+ * Modèle d'authentification correspondant à la table métier `utilisateur`.
+ *
+ * @property int $id_utilisateur Identifiant du compte.
+ * @property string $nom_utilisateur Nom de famille.
+ * @property string $prenom_utilisateur Prénom.
+ * @property string $adresse_utilisateur Adresse postale.
+ * @property int $CP_utilisateur Code postal.
+ * @property string $ville_utilisateur Ville.
+ * @property string|null $email_utilisateur Adresse e-mail.
+ * @property string $login_utilisateur Identifiant de connexion.
+ * @property string $mdp_utilisateur Mot de passe haché.
+ * @property string|null $tel_utilisateur Numéro de téléphone.
+ * @property string $role_utilisateur Rôle métier du compte.
+ */
 class Utilisateur extends Authenticatable
 {
+    /** Table métier contenant les comptes. */
     protected $table = 'utilisateur';
 
+    /** Clé primaire non conventionnelle du modèle. */
     protected $primaryKey = 'id_utilisateur';
 
+    /** Le schéma métier ne comporte pas de colonnes de suivi Laravel. */
     public $timestamps = false;
 
+    /** Le secret ne doit jamais être sérialisé dans une réponse. */
     protected $hidden = ['mdp_utilisateur'];
 
+    /** Hache automatiquement toute valeur affectée au champ du mot de passe. */
     protected $casts = ['mdp_utilisateur' => 'hashed'];
 
+    /** Champs métier autorisés pour l'assignation de masse. */
     protected $fillable = [
         'nom_utilisateur',
         'prenom_utilisateur',

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Panneau principal du dialogue, rendu dans une couche modale. */
 import type { DialogContentEmits, DialogContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { X } from "@lucide/vue"

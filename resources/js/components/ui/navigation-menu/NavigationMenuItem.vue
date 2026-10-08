@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Élément du menu de navigation contenant un déclencheur ou un lien. */
 import type { NavigationMenuItemProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

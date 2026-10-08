@@ -1,5 +1,7 @@
 <?php
 
+/** Configure les connexions SQL, le suivi des migrations et les connexions Redis. */
+
 use Illuminate\Support\Str;
 use Pdo\Mysql;
 

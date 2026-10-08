@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Lien ou bouton d’une entrée de sous-menu latéral. */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Primitive } from "reka-ui"

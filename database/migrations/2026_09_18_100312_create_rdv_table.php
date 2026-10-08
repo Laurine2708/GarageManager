@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Crée les rendez-vous et leurs liens vers le client et le véhicule concernés. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les rendez-vous avec leurs clés étrangères métier.
      */
     public function up(): void
     {
@@ -25,7 +26,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime la table des rendez-vous.
      */
     public function down(): void
     {

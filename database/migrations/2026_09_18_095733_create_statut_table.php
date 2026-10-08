@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Crée le référentiel des statuts utilisés par les interventions et tâches. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée le référentiel des libellés de statut.
      */
     public function up(): void
     {
@@ -18,7 +19,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime le référentiel des statuts.
      */
     public function down(): void
     {

@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * Lien Inertia souligné qui transmet le contenu de son slot.
+ * @prop href Destination du lien.
+ * @prop tabindex Ordre de tabulation facultatif.
+ * @prop method Méthode de navigation Inertia.
+ * @prop as Élément HTML utilisé pour le lien.
+ */
 import type { LinkComponentBaseProps, Method } from '@inertiajs/core';
 import { Link } from '@inertiajs/vue3';
 

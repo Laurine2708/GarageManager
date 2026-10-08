@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Zone révélée ou masquée par le déclencheur du conteneur pliable. */
 import type { CollapsibleContentProps } from "reka-ui"
 import { CollapsibleContent } from "reka-ui"
 

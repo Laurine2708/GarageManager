@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Lien d’un menu de navigation avec les propriétés du primitive Reka UI. */
 import type { NavigationMenuLinkEmits, NavigationMenuLinkProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Affiche le nom, l’avatar et, en option, l’adresse du compte utilisateur.
+ * @prop user Informations du compte.
+ * @prop showEmail Indique si l’adresse doit être visible.
+ */
 import { computed } from 'vue';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/composables/useInitials';
@@ -16,6 +21,7 @@ const props = withDefaults(defineProps<Props>(), {
 const { getInitials } = useInitials();
 
 // Compute whether we should show the avatar image
+/** Indique si le compte possède une URL d’avatar exploitable. */
 const showAvatar = computed(
     () => props.user.avatar && props.user.avatar !== '',
 );

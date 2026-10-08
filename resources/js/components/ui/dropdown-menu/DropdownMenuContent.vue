@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Panneau qui contient les options du menu déroulant. */
 import type { DropdownMenuContentEmits, DropdownMenuContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

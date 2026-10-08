@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Conteneur de carte destiné à regrouper un contenu apparenté dans un slot. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

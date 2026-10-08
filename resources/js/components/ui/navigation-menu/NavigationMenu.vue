@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Conteneur principal du menu de navigation.
+ * @prop viewport Affiche le viewport des sous-menus.
+ * @event Événements et propriétés Reka UI relayés à la racine.
+ */
 import type { NavigationMenuRootEmits, NavigationMenuRootProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

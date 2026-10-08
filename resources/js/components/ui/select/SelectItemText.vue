@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Texte de l’option affiché dans la valeur sélectionnée du sélecteur. */
 import type { SelectItemTextProps } from "reka-ui"
 import { SelectItemText } from "reka-ui"
 

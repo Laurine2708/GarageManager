@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * Fournit l’état partagé et les actions du contexte de barre latérale.
+ * @prop defaultOpen État initial lorsque la barre n’est pas contrôlée.
+ * @prop open État contrôlé facultatif.
+ * @prop class Classe appliquée au fournisseur.
+ * @event update:open Émis lorsque l’état contrôlé change.
+ */
 import type { HTMLAttributes, Ref } from "vue"
 import { defaultDocument, useEventListener, useMediaQuery, useVModel } from "@vueuse/core"
 import { TooltipProvider } from "reka-ui"
@@ -27,6 +34,7 @@ const open = useVModel(props, "open", emits, {
   passive: (props.open === undefined) as false,
 }) as Ref<boolean>
 
+/** Définit l’état d’ouverture desktop et le conserve dans un cookie. */
 function setOpen(value: boolean) {
   open.value = value // emits('update:open', value)
 
@@ -34,10 +42,12 @@ function setOpen(value: boolean) {
   document.cookie = `${SIDEBAR_COOKIE_NAME}=${open.value}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
 }
 
+/** Définit l’état ouvert du panneau mobile. */
 function setOpenMobile(value: boolean) {
   openMobile.value = value
 }
 
+/** Bascule le panneau mobile ou la sidebar selon la largeur de l’écran. */
 // Helper to toggle the sidebar.
 function toggleSidebar() {
   return isMobile.value ? setOpenMobile(!openMobile.value) : setOpen(!open.value)
@@ -50,6 +60,7 @@ useEventListener("keydown", (event: KeyboardEvent) => {
   }
 })
 
+/** État textuel utilisé pour les styles de sidebar développée ou réduite. */
 // We add a state so that we can do data-state="expanded" or "collapsed".
 // This makes it easier to style the sidebar with Tailwind classes.
 const state = computed(() => open.value ? "expanded" : "collapsed")
