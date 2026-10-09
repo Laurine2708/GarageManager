@@ -32,3 +32,9 @@ php artisan serve
 ```bash
 npm run dev
 ```
+
+Ou avec Docker Compose :
+
+```bash
+docker compose up -d
+```
