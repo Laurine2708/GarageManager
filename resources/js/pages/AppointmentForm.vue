@@ -95,7 +95,7 @@ function closeSuccessDialog(): void {
                 <Link href="/rendez-vous" class="nav-item active" aria-current="page">Rendez-vous</Link>
                 <span class="nav-item">Interventions</span>
                 <span class="nav-item">Pièces</span>
-                <span class="nav-item">Tarifs MO</span>
+                <Link href="/tarifs-mo" class="nav-item">Tarifs MO</Link>
                 <Link href="/mon-profil" class="nav-item">Mon profil</Link>
             </nav>
 

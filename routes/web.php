@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AppointmentsController;
+use App\Http\Controllers\TarifMOController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\VehiclesController;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,8 @@ Route::get('/', fn () => auth()->check()
 // Les routes métier exigent une session active et une adresse vérifiée.
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', DashboardController::class)->name('dashboard');
+    Route::get('tarifs-mo', [TarifMOController::class, 'index'])->name('labor-rates.index');
+    Route::put('tarifs-mo', [TarifMOController::class, 'update'])->name('labor-rates.update');
     Route::get('rendez-vous', [AppointmentsController::class, 'index'])->name('appointments.index');
     Route::get('rendez-vous/create', [AppointmentsController::class, 'create'])->name('appointments.create');
     Route::post('rendez-vous', [AppointmentsController::class, 'store'])->name('appointments.store');

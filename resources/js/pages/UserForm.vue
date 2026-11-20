@@ -180,6 +180,9 @@ function closeSuccessDialog(): void {
                     <Link v-else-if="item === 'Rendez-vous'" href="/rendez-vous" class="nav-item">
                         {{ item }}
                     </Link>
+                    <Link v-else-if="item === 'Tarifs MO' && props.role === 'administrateur'" href="/tarifs-mo" class="nav-item">
+                        {{ item }}
+                    </Link>
                     <Link
                         v-else-if="item === 'Mon profil' && ['client', 'mecanicien', 'administrateur'].includes(props.role)"
                         href="/mon-profil"

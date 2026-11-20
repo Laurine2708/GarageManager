@@ -61,6 +61,12 @@ class Intervention extends Model
         return $this->belongsTo(Statut::class, 'id_statut', 'id_statut');
     }
 
+    /** Tarif horaire appliqué au calcul du coût de main-d'œuvre. */
+    public function tarif(): BelongsTo
+    {
+        return $this->belongsTo(Tarif::class, 'id_tarif', 'id_tarif');
+    }
+
     /** Rendez-vous d'origine, utilisé pour afficher la date d'intervention. */
     public function rendezVous(): BelongsTo
     {
