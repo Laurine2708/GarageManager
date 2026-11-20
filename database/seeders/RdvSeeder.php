@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\Rdv;
 use Illuminate\Database\Seeder;
 
+/** Insère des rendez-vous de démonstration reliés aux clients et véhicules. */
 class RdvSeeder extends Seeder
 {
+    /** Crée les rendez-vous utilisés par les interventions de démonstration. */
     public function run(): void
     {
         Rdv::create([

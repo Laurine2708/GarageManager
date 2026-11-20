@@ -22,6 +22,7 @@ class UserFactory extends Factory
      *
      * @return array<string, mixed>
      */
+    /** Fournit les attributs par défaut d’un compte de test standard. */
     public function definition(): array
     {
         return [
@@ -36,6 +37,7 @@ class UserFactory extends Factory
     /**
      * Indicate that the model's email address should be unverified.
      */
+    /** Produit un compte dont l’adresse courriel reste à vérifier. */
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -46,5 +48,6 @@ class UserFactory extends Factory
     /**
      * Indicate that the model has two-factor authentication configured.
      */
+    /** État réservé aux comptes configurés pour l’authentification à deux facteurs. */
     public function withTwoFactor(): static {}
 }

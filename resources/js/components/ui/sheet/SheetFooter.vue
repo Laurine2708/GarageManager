@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Pied du panneau latéral destiné à ses actions. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

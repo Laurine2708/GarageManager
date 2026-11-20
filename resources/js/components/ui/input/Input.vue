@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Champ de saisie natif stylisé.
+ * @event Événements et attributs du champ transmis à l’élément input.
+ */
 import type { HTMLAttributes } from "vue"
 import { useVModel } from "@vueuse/core"
 import { cn } from "@/lib/utils"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Indicateur visuel de l’élément actif du menu de navigation. */
 import type { NavigationMenuIndicatorProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

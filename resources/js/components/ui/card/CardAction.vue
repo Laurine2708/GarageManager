@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Zone d’actions alignée avec l’en-tête d’une carte. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

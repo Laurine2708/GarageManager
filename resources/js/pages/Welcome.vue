@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Page d’accueil publique présentant GarageManager et ses points d’entrée. */
 import { Head, Link } from '@inertiajs/vue3';
 import { dashboard, login } from '@/routes';
 import { register } from '@/routes';

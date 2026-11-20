@@ -6,12 +6,15 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Laravel\Fortify\InteractsWithTwoFactorState;
 
+/**
+ * Requête associée à l'état de l'authentification à deux facteurs.
+ */
 class TwoFactorAuthenticationRequest extends FormRequest
 {
     use InteractsWithTwoFactorState;
 
     /**
-     * Get the validation rules that apply to the request.
+     * Ne déclare aucune règle supplémentaire pour la requête des paramètres 2FA.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */

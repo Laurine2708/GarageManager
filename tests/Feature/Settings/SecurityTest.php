@@ -9,6 +9,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
 
+/** Vérifie les réglages de sécurité, la confirmation et la mise à jour du mot de passe. */
 class SecurityTest extends TestCase
 {
     use RefreshDatabase;
@@ -80,15 +81,15 @@ class SecurityTest extends TestCase
             ->from(route('security.edit'))
             ->put(route('user-password.update'), [
                 'current_password' => 'password',
-                'password' => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password' => 'New-password!',
+                'password_confirmation' => 'New-password!',
             ]);
 
         $response
             ->assertSessionHasNoErrors()
             ->assertRedirect(route('security.edit'));
 
-        $this->assertTrue(Hash::check('new-password', $user->refresh()->password));
+        $this->assertTrue(Hash::check('New-password!', $user->refresh()->password));
     }
 
     public function test_correct_password_must_be_provided_to_update_password()
@@ -100,12 +101,29 @@ class SecurityTest extends TestCase
             ->from(route('security.edit'))
             ->put(route('user-password.update'), [
                 'current_password' => 'wrong-password',
-                'password' => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password' => 'New-password!',
+                'password_confirmation' => 'New-password!',
             ]);
 
         $response
             ->assertSessionHasErrors('current_password')
             ->assertRedirect(route('security.edit'));
+    }
+
+    public function test_password_must_have_twelve_characters_uppercase_lowercase_and_symbols(): void
+    {
+        $user = User::factory()->create();
+
+        foreach (['Abcdefgh1!', 'abcdefghijkl!X', 'ABCDEFGHIJKL!', 'Abcdefgh12XY'] as $invalidPassword) {
+            $this->actingAs($user)
+                ->from(route('security.edit'))
+                ->put(route('user-password.update'), [
+                    'current_password' => 'password',
+                    'password' => $invalidPassword,
+                    'password_confirmation' => $invalidPassword,
+                ])
+                ->assertSessionHasErrors('password')
+                ->assertRedirect(route('security.edit'));
+        }
     }
 }

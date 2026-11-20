@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Affiche les liens internes et marque l’URL courante comme active.
+ * @prop items Éléments de navigation à présenter.
+ */
 import { Link } from '@inertiajs/vue3';
 import {
     SidebarGroup,

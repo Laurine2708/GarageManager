@@ -8,10 +8,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
+/**
+ * Enregistre les services et valeurs par défaut partagés par l'application.
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Enregistre les services propres à l'application dans le conteneur.
      */
     public function register(): void
     {
@@ -19,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Initialise les comportements globaux après l'enregistrement des services.
      */
     public function boot(): void
     {
@@ -27,7 +30,7 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure default behaviors for production-ready applications.
+     * Configure les comportements globaux de dates, de base de données et de mots de passe.
      */
     protected function configureDefaults(): void
     {

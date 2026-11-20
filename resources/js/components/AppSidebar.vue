@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Fournit la navigation latérale et les liens fixes de l’application.
+ * @prop variant Variante de la barre latérale.
+ */
 import { Link } from '@inertiajs/vue3';
 import { BookOpen, FolderGit2, LayoutGrid } from '@lucide/vue';
 import AppLogo from '@/components/AppLogo.vue';

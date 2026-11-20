@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Présente le contenu enfant d’un bouton de menu latéral. */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import type { SidebarMenuButtonVariants } from "."

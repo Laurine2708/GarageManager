@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Présente les écrans d’authentification dans une carte centrée.
+ * @prop title Titre de l’écran.
+ * @prop description Texte d’accompagnement.
+ */
 import { Link } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import {

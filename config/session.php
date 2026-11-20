@@ -1,5 +1,7 @@
 <?php
 
+/** Configure la persistance des sessions et les attributs de leur cookie HTTP. */
+
 use Illuminate\Support\Str;
 
 return [

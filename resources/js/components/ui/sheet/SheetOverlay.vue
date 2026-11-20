@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Voile affiché derrière le panneau latéral ouvert. */
 import type { DialogOverlayProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Pied du dialogue destiné à regrouper ses actions. */
 import type { HTMLAttributes } from "vue"
 import { DialogClose } from "reka-ui"
 import { cn } from "@/lib/utils"

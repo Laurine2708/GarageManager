@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Zone d’affichage des panneaux ouverts du menu de navigation. */
 import type { NavigationMenuViewportProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

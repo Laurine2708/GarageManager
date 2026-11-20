@@ -10,10 +10,13 @@ use Laravel\Chisel\Script;
 use function Laravel\Prompts\multiselect;
 use function Laravel\Prompts\spin;
 
+/**
+ * Commande d'installation des fonctionnalités du kit de démarrage Laravel.
+ */
 class InstallFeaturesCommand extends Command
 {
     /**
-     * The name and signature of the console command.
+     * Nom de la commande et option permettant de fournir les réponses en JSON.
      *
      * @var string
      */
@@ -21,12 +24,17 @@ class InstallFeaturesCommand extends Command
         {--answers= : JSON string of answers to skip interactive prompts}';
 
     /**
-     * The console command description.
+     * Description affichée dans l'aide des commandes Artisan.
      *
      * @var string
      */
     protected $description = 'Choose which starter kit features to keep';
 
+    /**
+     * Collecte les choix du starter kit, applique le script Chisel et construit les ressources.
+     *
+     * Les options d'installation peuvent différer les hooks ou éviter les étapes Node.
+     */
     public function handle(): int
     {
         if ($this->shouldDeferInstallerHooks()) {
@@ -71,6 +79,9 @@ class InstallFeaturesCommand extends Command
         return self::SUCCESS;
     }
 
+    /**
+     * Indique si les hooks d'installation doivent être reportés.
+     */
     protected function shouldDeferInstallerHooks(): bool
     {
         if ($this->option('answers') !== null) {
@@ -80,11 +91,17 @@ class InstallFeaturesCommand extends Command
         return $this->installerFlag('LARAVEL_INSTALLER_DEFER_HOOKS');
     }
 
+    /**
+     * Indique si les étapes d'installation et de compilation Node doivent être omises.
+     */
     protected function shouldSkipNode(): bool
     {
         return $this->installerFlag('LARAVEL_INSTALLER_NO_NODE');
     }
 
+    /**
+     * Lit un indicateur booléen depuis l'environnement du processus.
+     */
     protected function installerFlag(string $name): bool
     {
         return filter_var(
@@ -93,6 +110,9 @@ class InstallFeaturesCommand extends Command
         );
     }
 
+    /**
+     * Installe les dépendances JavaScript avec le gestionnaire détecté par Chisel.
+     */
     protected function installNodeDependencies(): void
     {
         $npm = Chisel::in(base_path())->npm();
@@ -104,6 +124,9 @@ class InstallFeaturesCommand extends Command
         );
     }
 
+    /**
+     * Compile les ressources front-end après l'application des choix Chisel.
+     */
     protected function buildAssets(): void
     {
         $npm = Chisel::in(base_path())->npm();

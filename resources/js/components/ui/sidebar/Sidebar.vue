@@ -1,4 +1,11 @@
 <script setup lang="ts">
+/**
+ * Affiche la barre latérale selon son mode, son emplacement et l’appareil.
+ * @prop side Côté d’affichage.
+ * @prop variant Présentation visuelle.
+ * @prop collapsible Mode de réduction.
+ * @event L’état mobile est synchronisé avec le contexte de sidebar.
+ */
 import type { SidebarProps } from "."
 import { cn } from "@/lib/utils"
 import { Sheet, SheetContent } from '@/components/ui/sheet'

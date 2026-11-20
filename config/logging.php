@@ -1,5 +1,7 @@
 <?php
 
+/** Déclare les canaux Monolog et le niveau de journalisation de l’application. */
+
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;

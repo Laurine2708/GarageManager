@@ -6,10 +6,12 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Fortify\Features;
 use Tests\TestCase;
 
+/** Vérifie l’affichage du formulaire et la création d’un compte avec Fortify. */
 class RegistrationTest extends TestCase
 {
     use RefreshDatabase;
 
+    /** Ignore ces scénarios lorsque l’inscription est désactivée dans Fortify. */
     protected function setUp(): void
     {
         parent::setUp();

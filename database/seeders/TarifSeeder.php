@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\Tarif;
 use Illuminate\Database\Seeder;
 
+/** Insère les niveaux tarifaires utilisés par les interventions d’exemple. */
 class TarifSeeder extends Seeder
 {
+    /** Peuple le référentiel initial des tarifs horaires. */
     public function run(): void
     {
         Tarif::create([

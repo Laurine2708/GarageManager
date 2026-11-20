@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Panneau de contenu d’un élément du menu de navigation; relaie l’API Reka UI. */
 import type { NavigationMenuContentEmits, NavigationMenuContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

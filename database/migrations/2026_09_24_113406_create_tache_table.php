@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Crée les tâches rattachées à une intervention et à un statut. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les tâches et supprime leurs dépendances en cascade avec l’intervention.
      */
     public function up(): void
     {
@@ -25,7 +26,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime la table des tâches.
      */
     public function down(): void
     {

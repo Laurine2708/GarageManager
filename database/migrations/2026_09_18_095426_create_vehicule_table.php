@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Crée la table descriptive des véhicules suivis par le garage. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les colonnes d’identification et de motorisation des véhicules.
      */
     public function up(): void
     {
@@ -24,7 +25,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime la table des véhicules.
      */
     public function down(): void
     {

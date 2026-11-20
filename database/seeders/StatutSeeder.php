@@ -5,15 +5,16 @@ namespace Database\Seeders;
 use App\Models\Statut;
 use Illuminate\Database\Seeder;
 
+/** Définit les statuts de référence utilisés dans le suivi des travaux. */
 class StatutSeeder extends Seeder
 {
     /**
-     * Run the database seeds.
+     * Insère les états initiaux des tâches et interventions.
      */
     public function run(): void
     {
         Statut::create([
-            'nom_statut' => 'En attente',
+            'nom_statut' => 'À faire',
         ]);
 
         Statut::create([
@@ -24,8 +25,5 @@ class StatutSeeder extends Seeder
             'nom_statut' => 'Terminée',
         ]);
 
-        Statut::create([
-            'nom_statut' => 'À contrôler',
-        ]);
     }
 }

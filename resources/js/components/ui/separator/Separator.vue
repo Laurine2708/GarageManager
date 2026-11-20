@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Séparateur visuel ou sémantique entre des groupes de contenu. */
 import type { SeparatorProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

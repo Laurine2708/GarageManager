@@ -1,5 +1,7 @@
 <?php
 
+/** Associe les vues d’authentification aux composants frontend du projet. */
+
 return [
     'login' => 'resources/js/pages/auth/Login.vue',
     'register' => 'resources/js/pages/auth/Register.vue',

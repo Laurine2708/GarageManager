@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Présente l’authentification dans une mise en page à deux panneaux.
+ * @prop title Titre de l’écran.
+ * @prop description Texte d’accompagnement.
+ */
 import { Link, usePage } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';

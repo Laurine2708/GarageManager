@@ -1,5 +1,7 @@
 <?php
 
+/** Définit les disques de stockage et le lien public des fichiers. */
+
 return [
 
     /*

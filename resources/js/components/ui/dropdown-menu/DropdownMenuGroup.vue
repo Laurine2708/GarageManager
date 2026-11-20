@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Groupe d’options connexes du menu déroulant. */
 import type { DropdownMenuGroupProps } from "reka-ui"
 import { DropdownMenuGroup } from "reka-ui"
 

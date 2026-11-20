@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Contrôle qui ferme le dialogue courant. */
 import type { DialogCloseProps } from "reka-ui"
 import { DialogClose } from "reka-ui"
 

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Racine d’une infobulle contrôlée par le primitive Reka UI. */
 import type { TooltipRootEmits, TooltipRootProps } from "reka-ui"
 import { TooltipRoot, useForwardPropsEmits } from "reka-ui"
 

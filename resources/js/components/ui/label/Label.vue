@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Libellé de formulaire associé à un contrôle. */
 import type { LabelProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

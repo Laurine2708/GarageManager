@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Formulaire de création d’un compte utilisateur.
+ * @prop passwordRules Règles de validation à présenter.
+ */
 import { Form, Head } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';

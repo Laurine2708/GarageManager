@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Badge de statut ou d’étiquette avec une variante visuelle configurable. */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import type { BadgeVariants } from "."

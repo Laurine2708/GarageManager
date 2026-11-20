@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Retire le champ texte des travaux, désormais détaillés par les tâches. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Supprime la colonne remplacée par le suivi détaillé des tâches.
      */
     public function up(): void
     {
@@ -17,7 +18,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Restaure la colonne de travaux pour annuler cette évolution.
      */
     public function down(): void
     {

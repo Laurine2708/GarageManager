@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Voile visuel placé derrière le contenu d’un dialogue modal. */
 import type { DialogOverlayProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

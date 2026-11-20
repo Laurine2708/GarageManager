@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Formulaire de confirmation du mot de passe avant une action protégée. */
 import { Form, Head } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import PasswordInput from '@/components/PasswordInput.vue';

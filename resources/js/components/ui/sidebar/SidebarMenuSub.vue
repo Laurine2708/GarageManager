@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Liste imbriquée d’entrées dans un menu latéral. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

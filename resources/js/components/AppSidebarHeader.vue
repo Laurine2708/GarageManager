@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Affiche le haut de la sidebar et son fil d’Ariane optionnel.
+ * @prop breadcrumbs Étapes du fil d’Ariane.
+ */
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import type { BreadcrumbItem } from '@/types';

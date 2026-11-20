@@ -1,5 +1,7 @@
 <?php
 
+/** Centralise les identifiants des services tiers consommés par l’application. */
+
 return [
 
     /*

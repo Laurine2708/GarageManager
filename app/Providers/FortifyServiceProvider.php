@@ -14,10 +14,13 @@ use Inertia\Inertia;
 use Laravel\Fortify\Features;
 use Laravel\Fortify\Fortify;
 
+/**
+ * Configure Fortify pour utiliser les actions, vues et limites de l'application.
+ */
 class FortifyServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * Enregistre les services d'authentification propres à l'application.
      */
     public function register(): void
     {
@@ -25,7 +28,7 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Bootstrap any application services.
+     * Configure les actions, pages et limitations de débit de Fortify.
      */
     public function boot(): void
     {
@@ -35,7 +38,7 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure Fortify actions.
+     * Relie les flux d'inscription et de réinitialisation aux actions applicatives.
      */
     private function configureActions(): void
     {
@@ -44,10 +47,11 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure Fortify views.
+     * Associe les pages d'authentification Fortify aux composants Inertia.
      */
     private function configureViews(): void
     {
+        // Fortify conserve l'authentification de session et délègue le rendu du formulaire à Inertia.
         Fortify::loginView(fn (Request $request) => Inertia::render('auth/Login', [
             'canResetPassword' => Features::enabled(Features::resetPasswords()),
             'status' => $request->session()->get('status'),
@@ -71,13 +75,14 @@ class FortifyServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure rate limiting.
+     * Limite les tentatives de connexion par identifiant normalisé.
      */
     private function configureRateLimiting(): void
     {
 
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+            $login = $request->input(Fortify::username());
+            $throttleKey = Str::transliterate(Str::lower(is_string($login) ? $login : ''));
 
             return Limit::perMinute(5)->by($throttleKey);
         });

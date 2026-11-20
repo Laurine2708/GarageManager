@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Panneau latéral qui contient le contenu de la feuille modale. */
 import type { DialogContentEmits, DialogContentProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { X } from "@lucide/vue"

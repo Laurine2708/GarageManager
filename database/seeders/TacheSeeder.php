@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\Tache;
 use Illuminate\Database\Seeder;
 
+/** Insère le détail des tâches de chaque intervention de démonstration. */
 class TacheSeeder extends Seeder
 {
+    /** Crée des tâches d’exemple dans différents états d’avancement. */
     public function run(): void
     {
         // Intervention 1 - Révision complète
@@ -76,7 +78,7 @@ class TacheSeeder extends Seeder
 
         Tache::create([
             'libelle_tache' => 'Remplacement de la batterie',
-            'id_statut' => 4,
+            'id_statut' => 2,
             'id_intervention' => 5,
         ]);
     }

@@ -1,5 +1,7 @@
 <?php
 
+/** Configure Fortify : identifiant de connexion, routes et fonctions d’authentification. */
+
 use Laravel\Fortify\Features;
 
 return [
@@ -45,7 +47,8 @@ return [
     |
     */
 
-    'username' => 'email',
+    // Le formulaire utilise le login métier de la table `utilisateur`.
+    'username' => 'login_utilisateur',
 
     'email' => 'email',
 

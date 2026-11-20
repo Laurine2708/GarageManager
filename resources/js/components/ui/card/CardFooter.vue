@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Pied de carte destiné aux actions ou informations complémentaires. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

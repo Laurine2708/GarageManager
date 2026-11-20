@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Regroupe les pages de réglages avec leur navigation secondaire. */
 import { Link } from '@inertiajs/vue3';
 import Heading from '@/components/Heading.vue';
 import { Button } from '@/components/ui/button';

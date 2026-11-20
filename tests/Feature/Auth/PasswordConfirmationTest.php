@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Tests\TestCase;
 
+/** Vérifie l’accès à l’écran de confirmation du mot de passe. */
 class PasswordConfirmationTest extends TestCase
 {
     use RefreshDatabase;

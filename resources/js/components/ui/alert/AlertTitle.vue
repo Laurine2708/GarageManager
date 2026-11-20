@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Titre sémantique d’une alerte. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

@@ -6,12 +6,13 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
+/** Orchestre le peuplement initial des données de développement. */
 class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
     /**
-     * Seed the application's database.
+     * Crée un compte de démonstration pour les essais et le développement.
      */
     public function run(): void
     {

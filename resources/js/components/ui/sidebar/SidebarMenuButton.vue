@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Bouton ou lien principal d’une entrée du menu latéral. */
 import type { Component } from "vue"
 import type { SidebarMenuButtonProps } from "./SidebarMenuButtonChild.vue"
 import { reactiveOmit } from "@vueuse/core"

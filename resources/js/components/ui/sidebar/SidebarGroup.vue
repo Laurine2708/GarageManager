@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Groupe d’éléments dans la barre latérale. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/** Vérifie un invariant élémentaire du banc de tests unitaires. */
 class ExampleTest extends TestCase
 {
     use RefreshDatabase;

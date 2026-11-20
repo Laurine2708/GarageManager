@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/** Racine sémantique du fil d’Ariane. */
 import type { HTMLAttributes } from "vue"
 
 const props = defineProps<{

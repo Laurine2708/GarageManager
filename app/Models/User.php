@@ -12,6 +12,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
 /**
+ * Compte d'authentification standard utilisé par Fortify.
+ *
  * @property int $id
  * @property string $name
  * @property string $email
@@ -32,7 +34,7 @@ class User extends Authenticatable
     use HasFactory, Notifiable;
 
     /**
-     * Get the attributes that should be cast.
+     * Définit les conversions appliquées aux attributs lus depuis la base.
      *
      * @return array<string, string>
      */

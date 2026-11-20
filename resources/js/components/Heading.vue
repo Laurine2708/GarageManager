@@ -1,4 +1,10 @@
 <script setup lang="ts">
+/**
+ * Présente un titre avec description dans l’une des deux tailles disponibles.
+ * @prop title Texte du titre.
+ * @prop description Texte descriptif facultatif.
+ * @prop variant Variante typographique.
+ */
 type Props = {
     title: string;
     description?: string;

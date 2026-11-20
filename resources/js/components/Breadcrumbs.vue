@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Construit un fil d’Ariane dont seul le dernier élément n’est pas un lien.
+ * @prop breadcrumbs Étapes ordonnées du fil d’Ariane.
+ */
 import { Link } from '@inertiajs/vue3';
 import {
     Breadcrumb,

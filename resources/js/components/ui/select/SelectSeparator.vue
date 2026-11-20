@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Séparateur visuel entre les groupes d’options. */
 import type { SelectSeparatorProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

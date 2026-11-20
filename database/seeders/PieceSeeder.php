@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\Piece;
 use Illuminate\Database\Seeder;
 
+/** Insère les pièces de démonstration avec leurs références, prix et stocks. */
 class PieceSeeder extends Seeder
 {
+    /** Peuple le catalogue d’articles utilisé par les exemples du garage. */
     public function run(): void
     {
         Piece::create([

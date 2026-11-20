@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** En-tête de carte regroupant titre, description et actions éventuelles. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

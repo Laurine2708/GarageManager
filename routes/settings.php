@@ -5,6 +5,7 @@ use App\Http\Controllers\Settings\SecurityController;
 use Illuminate\Auth\Middleware\RequirePassword;
 use Illuminate\Support\Facades\Route;
 
+// Paramètres de profil accessibles à toute session authentifiée.
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', '/settings/profile');
 
@@ -12,6 +13,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('settings/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
+// Les opérations sensibles exigent une session vérifiée et, au besoin, un mot de passe confirmé.
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('settings/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 

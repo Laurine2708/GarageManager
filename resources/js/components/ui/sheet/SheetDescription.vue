@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Description accessible du panneau latéral. */
 import type { DialogDescriptionProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { reactiveOmit } from "@vueuse/core"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Commande de défilement vers le haut de la liste du sélecteur. */
 import type { SelectScrollUpButtonProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { ChevronUp } from "@lucide/vue"

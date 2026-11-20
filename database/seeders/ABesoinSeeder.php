@@ -5,8 +5,10 @@ namespace Database\Seeders;
 use App\Models\ABesoin;
 use Illuminate\Database\Seeder;
 
+/** Associe les pièces de démonstration aux interventions qui les requièrent. */
 class ABesoinSeeder extends Seeder
 {
+    /** Insère les besoins en pièces du jeu de données initial. */
     public function run(): void
     {
         // Intervention 1 - Révision complète

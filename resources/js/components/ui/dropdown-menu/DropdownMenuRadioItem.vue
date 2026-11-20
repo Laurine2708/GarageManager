@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Option radio sélectionnable dans un menu déroulant. */
 import type { DropdownMenuRadioItemEmits, DropdownMenuRadioItemProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Circle } from "@lucide/vue"

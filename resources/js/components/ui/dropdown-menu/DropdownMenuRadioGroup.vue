@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Groupe d’options mutuellement exclusives du menu déroulant. */
 import type { DropdownMenuRadioGroupEmits, DropdownMenuRadioGroupProps } from "reka-ui"
 import {
   DropdownMenuRadioGroup,

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Page de réglages du profil et formulaire de mise à jour des coordonnées. */
 import { Form, Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
@@ -22,6 +23,7 @@ defineOptions({
 });
 
 const page = usePage();
+/** Utilisateur authentifié utilisé pour préremplir le formulaire de profil. */
 const user = computed(() => page.props.auth.user);
 </script>
 

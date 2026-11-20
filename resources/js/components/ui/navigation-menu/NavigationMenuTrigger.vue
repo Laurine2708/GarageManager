@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Bouton qui ouvre ou ferme le contenu associé du menu. */
 import type { NavigationMenuTriggerProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { ChevronDown } from "@lucide/vue"

@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+/** Étape courante du fil d’Ariane, rendue comme texte non cliquable. */
 import type { HTMLAttributes } from "vue"
 import { cn } from "@/lib/utils"
 

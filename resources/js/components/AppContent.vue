@@ -1,4 +1,9 @@
 <script setup lang="ts">
+/**
+ * Rend le contenu d’une page dans la zone adaptée à la variante de l’application.
+ * @prop variant Mode de structure du contenu.
+ * @prop class Classe additionnelle.
+ */
 import { computed } from 'vue';
 import { SidebarInset } from '@/components/ui/sidebar';
 import type { AppVariant } from '@/types';
@@ -11,6 +16,7 @@ type Props = {
 const props = withDefaults(defineProps<Props>(), {
     variant: 'sidebar',
 });
+/** Classe facultative appliquée à la zone de contenu. */
 const className = computed(() => props.class);
 </script>
 

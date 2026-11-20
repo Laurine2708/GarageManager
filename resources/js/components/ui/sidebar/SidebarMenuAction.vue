@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Action secondaire associée à une entrée de menu latéral. */
 import type { PrimitiveProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Primitive } from "reka-ui"

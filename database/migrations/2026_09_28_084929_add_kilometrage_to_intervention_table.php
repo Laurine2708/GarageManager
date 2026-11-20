@@ -4,10 +4,11 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/** Ajoute le kilométrage relevé lors d’une intervention. */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Ajoute un kilométrage facultatif aux interventions existantes.
      */
     public function up(): void
     {
@@ -17,7 +18,7 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Retire le kilométrage lors du retour au schéma précédent.
      */
     public function down(): void
     {

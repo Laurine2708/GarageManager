@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Formulaire de demande de lien de réinitialisation du mot de passe.
+ * @prop status Message de résultat éventuellement transmis par le serveur.
+ */
 import { Form, Head } from '@inertiajs/vue3';
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';

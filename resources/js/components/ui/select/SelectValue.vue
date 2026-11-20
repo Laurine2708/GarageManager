@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Présente la valeur courante ou le texte indicatif du sélecteur. */
 import type { SelectValueProps } from "reka-ui"
 import { SelectValue } from "reka-ui"
 

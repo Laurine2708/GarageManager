@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Page de réglage du thème d’affichage de l’application. */
 import { Head } from '@inertiajs/vue3';
 import AppearanceTabs from '@/components/AppearanceTabs.vue';
 import Heading from '@/components/Heading.vue';

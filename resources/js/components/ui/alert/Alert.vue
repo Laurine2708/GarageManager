@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Conteneur d’alerte avec style adapté à son niveau d’importance. */
 import type { HTMLAttributes } from "vue"
 import type { AlertVariants } from "."
 import { cn } from "@/lib/utils"

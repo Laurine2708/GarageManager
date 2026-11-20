@@ -1,4 +1,5 @@
 <script setup lang="ts">
+/** Option sélectionnable du menu déroulant, avec son indicateur de sélection. */
 import type { SelectItemProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
 import { Check } from "@lucide/vue"

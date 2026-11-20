@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/** Vérifie l’affichage, la mise à jour et la suppression du profil utilisateur. */
 class ProfileUpdateTest extends TestCase
 {
     use RefreshDatabase;

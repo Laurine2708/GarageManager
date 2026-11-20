@@ -1,4 +1,8 @@
 <script setup lang="ts">
+/**
+ * Affiche un message d’erreur de validation lorsqu’il est fourni.
+ * @prop message Texte d’erreur facultatif.
+ */
 defineProps<{
     message?: string;
 }>();
